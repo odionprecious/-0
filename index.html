@@ -6,7 +6,9 @@
     <link rel="icon" type="image/png" href="https://tinyurl.com/55p6arf7">
     <meta name="description" content="Nitadol Bank - Institutional Grade Digital Asset Management and Private Wealth Services.">
     <title>NITADOL BANK | Private Wealth & Digital Assets</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         :root {
             --navy-dark: #050a14;
@@ -32,6 +34,8 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         body { background-color: var(--bg-main); color: var(--white); overflow-x: hidden; width: 100%; line-height: 1.6; transition: background 0.3s ease; }
+
+        /* ===== NAV ===== */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(5, 10, 20, 0.95); backdrop-filter: blur(10px); position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid rgba(179, 147, 89, 0.2); }
         .logo { font-size: 20px; font-weight: 900; color: var(--white); text-decoration: none; }
         .logo span { color: var(--gold); }
@@ -61,6 +65,8 @@
         .token-box { background: #000; padding: 15px; border-radius: 10px; border: 1px solid var(--success); margin-top: 10px; text-align: center; }
         .token-val { font-family: 'JetBrains Mono', monospace; color: var(--success); font-size: 24px; letter-spacing: 5px; }
         .progress-bar { height: 4px; background: var(--success); width: 100%; margin-top: 10px; transition: width 1s linear; }
+
+        /* ===== MODAL ===== */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 20px; overflow-y: auto; }
         .modal-content { background: var(--navy-mural); width: 100%; max-width: 450px; padding: 30px; border-radius: 25px; border: 1px solid var(--gold); }
         input, select { width: 100%; padding: 15px; margin-bottom: 15px; background: var(--card-bg); border: 1px solid var(--gold-glow); border-radius: 10px; color: var(--white); outline: none; }
@@ -68,484 +74,799 @@
         .primary-btn:hover { background: var(--gold-bright); letter-spacing: 1px; }
         .reg-step { display: none; }
         .reg-step.active { display: block; }
-        .rates-section { padding: 100px 8%; background: var(--navy-mural); text-align: center; }
-        .rates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-top: 40px; }
-        .rate-card { background: var(--card-bg); padding: 25px; border-radius: 15px; border: 1px solid rgba(179,147,89,0.2); transition: 0.3s; }
-        .rate-card:hover { transform: translateY(-6px); border-color: var(--gold); }
-        .rate-card h3 { color: var(--gold); margin-bottom: 8px; }
-        .rate-price { font-size: 24px; font-weight: 700; }
-        .testimonial-section { padding: 100px 8%; background: var(--bg-main); text-align: center; }
-        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px; }
-        .testimonial { background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid rgba(179,147,89,0.15); }
-        .testimonial p { font-size: 14px; color: var(--text-gray); margin-bottom: 15px; }
-        .testimonial h4 { color: var(--gold); }
-        .card-container { perspective: 1200px; }
-        .visa-card { transform-style: preserve-3d; transition: transform 0.6s; }
-        .visa-card:hover { transform: rotateY(15deg) rotateX(8deg); }
-        .market-board { background: #000; padding: 40px 8%; border-top: 1px solid var(--gold-glow); border-bottom: 1px solid var(--gold-glow); }
-        .market-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 25px; }
-        .market-item { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid rgba(179,147,89,0.15); text-align: center; }
-        .market-item h3 { color: var(--gold); margin-bottom: 6px; }
-        .market-price { font-size: 22px; font-weight: 700; }
-        .world-map { padding: 100px 8%; text-align: center; background: var(--navy-mural); }
-        .map-container { position: relative; max-width: 900px; margin: auto; }
-        .map-container img { width: 100%; opacity: 0.8; }
-        .map-dot { position: absolute; width: 12px; height: 12px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 12px var(--gold); animation: pulse 2s infinite; }
+
+        /* ===== OLD DASH (hidden now, replaced) ===== */
+        #dash-view { display: none; padding: 0; background: #050a14; min-height: 100vh; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
+        .stat-item { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--gold); color: var(--white); }
+        .history-card { background: var(--card-bg); margin-top: 30px; border-radius: 20px; padding: 25px; border: 1px solid rgba(179,147,89,0.1); }
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .history-table th { text-align: left; color: var(--text-gray); font-size: 12px; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .history-table td { padding: 15px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+        .status-fail { color: var(--error); font-weight: bold; display: flex; align-items: center; gap: 5px; }
+        .status-pending { color: #facc15; font-weight: bold; }
+        .details-pane { background: var(--card-bg); border: 1px solid var(--gold); border-radius: 15px; padding: 25px; margin-top: 20px; display: none; }
+        .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .spinner-old { width: 40px; height: 40px; border: 4px solid rgba(179,147,89,0.1); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin: 20px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .action-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .action-item { background: var(--navy-mural); border: 1px solid rgba(179,147,89,0.3); padding: 15px 5px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .action-item:hover { border-color: var(--gold); background: var(--card-bg); }
+        .action-item span { display: block; font-size: 20px; margin-bottom: 5px; }
+        .action-item p { font-size: 10px; font-weight: 700; color: var(--gold); }
+        .rates-section { padding:100px 8%; background:var(--navy-mural); text-align:center; }
+        .rates-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:25px; margin-top:40px; }
+        .rate-card { background:var(--card-bg); padding:25px; border-radius:15px; border:1px solid rgba(179,147,89,0.2); transition:0.3s; }
+        .rate-card:hover { transform:translateY(-6px); border-color:var(--gold); }
+        .rate-card h3 { color:var(--gold); margin-bottom:8px; }
+        .rate-price { font-size:24px; font-weight:700; }
+        .testimonial-section { padding:100px 8%; background:var(--bg-main); text-align:center; }
+        .testimonial-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-top:40px; }
+        .testimonial { background:var(--card-bg); padding:30px; border-radius:20px; border:1px solid rgba(179,147,89,0.15); }
+        .testimonial p { font-size:14px; color:var(--text-gray); margin-bottom:15px; }
+        .testimonial h4 { color:var(--gold); }
+        .card-container { perspective:1200px; }
+        .visa-card { transform-style:preserve-3d; transition:transform 0.6s; }
+        .visa-card:hover { transform:rotateY(15deg) rotateX(8deg); }
+        .market-board { background:#000; padding:40px 8%; border-top:1px solid var(--gold-glow); border-bottom:1px solid var(--gold-glow); }
+        .market-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; margin-top:25px; }
+        .market-item { background:var(--card-bg); padding:20px; border-radius:12px; border:1px solid rgba(179,147,89,0.15); text-align:center; }
+        .market-item h3 { color:var(--gold); margin-bottom:6px; }
+        .market-price { font-size:22px; font-weight:700; }
+        .world-map { padding:100px 8%; text-align:center; background:var(--navy-mural); }
+        .map-container { position:relative; max-width:900px; margin:auto; }
+        .map-container img { width:100%; opacity:0.8; }
+        .map-dot { position:absolute; width:12px; height:12px; background:var(--gold); border-radius:50%; box-shadow:0 0 12px var(--gold); animation:pulse 2s infinite; }
         @keyframes pulse { 0%{transform:scale(1)} 50%{transform:scale(1.6)} 100%{transform:scale(1)} }
-        .dot-zurich{top:38%;left:50%} .dot-london{top:34%;left:48%} .dot-singapore{top:64%;left:74%} .dot-newyork{top:40%;left:26%} .dot-dubai{top:49%;left:59%}
-        .glass-effect { background: rgba(15,23,42,0.45)!important; backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border: 1px solid rgba(179,147,89,0.4)!important; box-shadow: 0 25px 50px -12px rgb(179 147 89/0.3); transition: all 0.4s cubic-bezier(0.4,0,0.2,1); }
-        .glass-effect:hover { box-shadow: 0 35px 60px -15px rgb(179 147 89/0.4); transform: translateY(-3px); }
+        .dot-zurich{top:38%; left:50%;} .dot-london{top:34%; left:48%;} .dot-singapore{top:64%; left:74%;} .dot-newyork{top:40%; left:26%;} .dot-dubai{top:49%; left:59%;}
+        .glass-effect { background: rgba(15, 23, 42, 0.45) !important; backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border: 1px solid rgba(179, 147, 89, 0.4) !important; box-shadow: 0 25px 50px -12px rgb(179 147 89 / 0.3); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .glass-effect:hover { box-shadow: 0 35px 60px -15px rgb(179 147 89 / 0.4); transform: translateY(-3px); }
         .liquid-glass { position: relative; overflow: hidden; }
-        .liquid-glass::before { content:''; position:absolute; top:-50%; left:-50%; width:40%; height:300%; background:linear-gradient(120deg,transparent,rgba(229,192,123,0.25),transparent); animation:liquidFlow 6s linear infinite; opacity:0.6; pointer-events:none; }
-        @keyframes liquidFlow { 0%{transform:translateX(-100%) rotate(15deg)} 100%{transform:translateX(300%) rotate(15deg)} }
-        .mature-header { font-family:'Inter',sans-serif; letter-spacing:-1.5px; font-weight:700; }
-        .profile-avatar { width:82px; height:82px; border-radius:50%; object-fit:cover; border:5px solid var(--gold); box-shadow:0 0 0 6px rgba(179,147,89,0.2),0 10px 30px rgba(179,147,89,0.3); transition:transform 0.3s ease; }
-        .profile-avatar:hover { transform:scale(1.08) rotate(5deg); }
-        .explore-card { cursor:pointer; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); }
-        .explore-card:hover { transform:scale(1.04); border-color:var(--gold-bright); }
-        .extra-section { position:relative; }
-        .extra-section::after { content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:60px; height:3px; background:linear-gradient(to right,transparent,var(--gold),transparent); }
-        .history-table { width:100%; border-collapse:collapse; margin-top:15px; }
-        .history-table th { text-align:left; color:var(--text-gray); font-size:12px; padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); }
-        .history-table td { padding:15px 10px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:14px; }
-        .status-fail { color:var(--error); font-weight:bold; display:flex; align-items:center; gap:5px; }
-        .status-pending { color:#facc15; font-weight:bold; }
-        .details-pane { background:var(--card-bg); border:1px solid var(--gold); border-radius:15px; padding:25px; margin-top:20px; display:none; }
-        .detail-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
-        .spinner { width:40px; height:40px; border:4px solid rgba(179,147,89,0.1); border-top-color:var(--gold); border-radius:50%; animation:spin 1s infinite linear; margin:20px auto; }
-        @keyframes spin { to{transform:rotate(360deg)} }
+        .liquid-glass::before { content: ''; position: absolute; top: -50%; left: -50%; width: 40%; height: 300%; background: linear-gradient(120deg, transparent, rgba(229, 192, 123, 0.25), transparent); animation: liquidFlow 6s linear infinite; opacity: 0.6; pointer-events: none; }
+        @keyframes liquidFlow { 0% { transform: translateX(-100%) rotate(15deg); } 100% { transform: translateX(300%) rotate(15deg); } }
+        .mature-header { font-family: 'Inter', sans-serif; letter-spacing: -1.5px; font-weight: 700; }
+        .profile-avatar { width: 82px; height: 82px; border-radius: 50%; object-fit: cover; border: 5px solid var(--gold); box-shadow: 0 0 0 6px rgba(179, 147, 89, 0.2), 0 10px 30px rgba(179, 147, 89, 0.3); transition: transform 0.3s ease; }
+        .profile-avatar:hover { transform: scale(1.08) rotate(5deg); }
+        .explore-card { cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .explore-card:hover { transform: scale(1.04); border-color: var(--gold-bright); }
+        .extra-section { position: relative; }
+        .extra-section::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
 
-        /* ===== FULL PAGE LOADING OVERLAY ===== */
-        #loadingOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5,10,20,0.97); z-index: 99999;
-            display: none; justify-content: center; align-items: center;
-            flex-direction: column; gap: 20px;
-        }
-        #loadingOverlay.active { display: flex; }
-        .big-spinner {
-            width: 60px; height: 60px;
-            border: 5px solid rgba(179,147,89,0.2);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 0.8s infinite linear;
-        }
-        #loadingOverlay p { color: var(--gold); font-size: 14px; font-weight: 600; letter-spacing: 2px; }
-
+        /* ============================================= */
         /* ===== NEW OPAY-STYLE DASHBOARD ===== */
-        #dash-view {
+        /* ============================================= */
+
+        /* Full screen phone app wrapper */
+        #new-dash {
             display: none;
-            background: #070d1a;
+            background: #0a0f1a;
             min-height: 100vh;
-            padding-bottom: 90px;
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            padding-bottom: 80px;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Top header bar */
-        .dash-topbar {
-            background: linear-gradient(135deg, #0a1520 0%, #111c2e 100%);
-            padding: 50px 20px 20px;
+        /* ---- TOP BALANCE CARD ---- */
+        .dash-header-card {
+            background: linear-gradient(135deg, #b39359 0%, #8a6f3a 40%, #c9a96e 100%);
+            border-radius: 0 0 30px 30px;
+            padding: 20px 20px 30px;
             position: relative;
+            overflow: hidden;
         }
-        .dash-topbar-inner {
+        .dash-header-card::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+        .dash-header-card::after {
+            content: '';
+            position: absolute;
+            bottom: -40px; left: -20px;
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+        .dash-top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
+            padding-top: 10px;
         }
-        .dash-user-left {
+        .dash-profile-row {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
-        .dash-avatar-wrap {
-            position: relative;
-        }
-        .dash-avatar {
-            width: 50px; height: 50px;
+        .dash-avatar-sm {
+            width: 44px; height: 44px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--gold);
+            border: 2px solid rgba(255,255,255,0.5);
         }
-        .dash-user-info h3 {
-            font-size: 16px;
+        .dash-greeting {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 400;
+        }
+        .dash-username {
+            font-size: 15px;
             font-weight: 700;
-            color: var(--white);
-        }
-        .dash-user-info p {
-            font-size: 12px;
-            color: var(--text-gray);
-        }
-        .dash-top-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+            color: #fff;
         }
         .notif-btn {
             position: relative;
-            background: rgba(179,147,89,0.15);
-            border: 1px solid rgba(179,147,89,0.3);
+            background: rgba(0,0,0,0.25);
+            border: none;
+            width: 40px; height: 40px;
             border-radius: 50%;
-            width: 42px; height: 42px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            font-size: 18px;
-            transition: 0.3s;
+            color: white;
+            font-size: 16px;
         }
-        .notif-btn:hover { background: rgba(179,147,89,0.3); }
         .notif-badge {
             position: absolute;
             top: -4px; right: -4px;
             background: #ff4b4b;
-            color: white;
+            color: #fff;
             font-size: 10px;
             font-weight: 800;
             width: 18px; height: 18px;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
             display: none;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #0a0f1a;
         }
-
-        /* Balance Card */
-        .balance-card {
-            margin: 16px;
-            background: linear-gradient(135deg, #b39359 0%, #8a6d3f 50%, #b39359 100%);
-            border-radius: 20px;
-            padding: 24px;
+        .notif-badge.visible { display: flex; }
+        .balance-section {
+            text-align: center;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(179,147,89,0.4);
-        }
-        .balance-card::before {
-            content: '';
-            position: absolute;
-            top: -40px; right: -40px;
-            width: 160px; height: 160px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-        }
-        .balance-card::after {
-            content: '';
-            position: absolute;
-            bottom: -30px; left: 30px;
-            width: 100px; height: 100px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
+            z-index: 1;
+            padding: 10px 0;
         }
         .balance-label {
             font-size: 12px;
-            color: rgba(0,0,0,0.7);
-            font-weight: 600;
+            color: rgba(255,255,255,0.7);
             letter-spacing: 1px;
             text-transform: uppercase;
+            margin-bottom: 6px;
         }
         .balance-amount-row {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
-            margin: 8px 0 16px;
+            margin-bottom: 8px;
         }
         .balance-amount {
             font-size: 36px;
-            font-weight: 900;
-            color: #000;
-            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -1px;
         }
-        .eye-btn {
+        .eye-toggle {
             background: rgba(0,0,0,0.2);
             border: none;
+            color: rgba(255,255,255,0.8);
+            width: 32px; height: 32px;
             border-radius: 50%;
-            width: 34px; height: 34px;
-            display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            font-size: 16px;
-            color: rgba(0,0,0,0.8);
-            transition: 0.2s;
-            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
         }
-        .eye-btn:hover { background: rgba(0,0,0,0.35); }
-        .balance-card-actions {
+        .balance-sub {
+            font-size: 12px;
+            color: rgba(255,255,255,0.65);
+        }
+        .balance-actions {
             display: flex;
             gap: 10px;
-            position: relative;
-            z-index: 1;
+            justify-content: center;
+            margin-top: 20px;
         }
         .bal-action-btn {
             flex: 1;
-            padding: 10px 8px;
-            background: rgba(0,0,0,0.25);
-            border: 1px solid rgba(0,0,0,0.2);
+            max-width: 140px;
+            padding: 10px 0;
             border-radius: 12px;
-            color: #000;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .bal-action-btn:hover { background: rgba(0,0,0,0.4); }
-        .bal-action-btn span { display: block; font-size: 18px; margin-bottom: 4px; }
-        .balance-card-id {
-            font-size: 11px;
-            color: rgba(0,0,0,0.6);
-            margin-top: 12px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Quick Services Grid */
-        .services-section {
-            margin: 16px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(179,147,89,0.15);
-            border-radius: 20px;
-            padding: 20px;
-        }
-        .services-section-title {
+            border: none;
             font-size: 13px;
             font-weight: 700;
-            color: var(--text-gray);
-            margin-bottom: 16px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
-        .services-grid {
+        .bal-action-btn.add { background: rgba(0,0,0,0.3); color: #fff; }
+        .bal-action-btn.transfer { background: #fff; color: #000; }
+        .bal-action-btn:active { transform: scale(0.96); }
+
+        /* ---- QUICK ACTIONS GRID ---- */
+        .dash-section {
+            padding: 0 16px;
+            margin-top: 24px;
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(179,147,89,0.2);
+        }
+
+        .quick-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
         }
-        .service-btn {
+        .quick-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            padding: 14px 8px;
-            background: rgba(179,147,89,0.08);
-            border: 1px solid rgba(179,147,89,0.15);
-            border-radius: 14px;
             cursor: pointer;
-            transition: 0.25s;
-            text-align: center;
+            transition: transform 0.2s;
         }
-        .service-btn:hover {
-            background: rgba(179,147,89,0.2);
+        .quick-item:active { transform: scale(0.92); }
+        .quick-icon {
+            width: 52px; height: 52px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid rgba(179,147,89,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: border-color 0.2s;
+        }
+        .quick-item:hover .quick-icon {
             border-color: var(--gold);
-            transform: translateY(-2px);
         }
-        .service-btn .svc-icon { font-size: 24px; }
-        .service-btn .svc-label { font-size: 10px; font-weight: 600; color: var(--text-gray); line-height: 1.2; }
+        .quick-icon img {
+            width: 28px; height: 28px;
+            object-fit: contain;
+        }
+        .quick-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-gray);
+            text-align: center;
+            line-height: 1.2;
+        }
 
-        /* Savings section */
-        .savings-section {
-            margin: 16px;
-            background: linear-gradient(135deg, #0d1e35 0%, #0a1525 100%);
-            border: 1px solid rgba(179,147,89,0.2);
-            border-radius: 20px;
-            padding: 20px;
+        /* ---- SAVINGS BANNER ---- */
+        .savings-banner {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border: 1px solid rgba(179,147,89,0.3);
+            border-radius: 18px;
+            padding: 18px 20px;
             display: flex;
             align-items: center;
             gap: 16px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
         }
-        .savings-section:hover { border-color: var(--gold); transform: scale(1.01); }
-        .savings-icon { font-size: 48px; flex-shrink: 0; }
-        .savings-text h3 { font-size: 16px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
-        .savings-text p { font-size: 13px; color: var(--text-gray); }
-        .savings-arrow { margin-left: auto; color: var(--gold); font-size: 20px; }
+        .savings-banner:active { transform: scale(0.98); }
+        .savings-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #b39359, #8a6f3a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .savings-text { flex: 1; }
+        .savings-text h4 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+        .savings-text p { font-size: 12px; color: var(--text-gray); }
+        .savings-arrow { color: var(--gold); font-size: 18px; }
 
-        /* Bottom Nav */
+        /* ---- BOTTOM NAV ---- */
         .bottom-nav {
             position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: #0a1322;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: #0a0f1a;
             border-top: 1px solid rgba(179,147,89,0.2);
             display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0 16px;
             z-index: 1000;
+            padding: 8px 0 12px;
         }
-        .nav-btn {
+        .nav-tab {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
             cursor: pointer;
-            padding: 8px 16px;
-            border-radius: 12px;
+            padding: 8px 4px;
             transition: 0.2s;
-            min-width: 60px;
+            border: none;
+            background: transparent;
+            color: var(--text-gray);
         }
-        .nav-btn .nav-icon { font-size: 22px; }
-        .nav-btn .nav-label { font-size: 10px; font-weight: 600; color: var(--text-gray); }
-        .nav-btn.active .nav-label { color: var(--gold); }
-        .nav-btn.active .nav-icon { filter: drop-shadow(0 0 6px var(--gold)); }
+        .nav-tab.active { color: var(--gold); }
+        .nav-tab i { font-size: 20px; }
+        .nav-tab span { font-size: 10px; font-weight: 600; }
 
-        /* Dashboard Tab Pages */
-        .dash-tab { display: none; }
-        .dash-tab.active { display: block; }
+        /* ---- PAGES ---- */
+        .dash-page { display: none; }
+        .dash-page.active { display: block; }
 
-        /* CARD TAB */
-        .card-tab-content { padding: 20px; }
-        .card-display { background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%); border-radius: 20px; padding: 28px; margin-bottom: 20px; position: relative; overflow: hidden; border: 1px solid rgba(179,147,89,0.4); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .card-display::before { content:''; position:absolute; top:-30px; right:-30px; width:120px; height:120px; background:rgba(179,147,89,0.08); border-radius:50%; }
-        .card-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
-        .card-chip { width:44px; height:34px; background:linear-gradient(135deg,#d4af37,#f9e29c); border-radius:6px; }
-        .card-brand { color:var(--gold); font-style:italic; font-weight:900; font-size:16px; }
-        .card-number-full { font-family:'JetBrains Mono',monospace; font-size:20px; letter-spacing:3px; color:white; margin:16px 0; }
-        .card-footer-row { display:flex; justify-content:space-between; align-items:flex-end; }
-        .card-info-label { font-size:9px; color:var(--text-gray); letter-spacing:1px; margin-bottom:4px; text-transform:uppercase; }
-        .card-info-val { font-size:14px; color:white; font-weight:600; }
-        .card-actions-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-        .card-action { background:rgba(179,147,89,0.1); border:1px solid rgba(179,147,89,0.2); border-radius:14px; padding:16px; text-align:center; cursor:pointer; transition:0.3s; }
-        .card-action:hover { background:rgba(179,147,89,0.25); border-color:var(--gold); }
-        .card-action span { display:block; font-size:24px; margin-bottom:6px; }
-        .card-action p { font-size:12px; color:var(--gold); font-weight:700; }
+        /* ---- CARD PAGE ---- */
+        .card-page-content {
+            padding: 70px 16px 20px;
+        }
+        .card-page-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .card-page-sub {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 24px;
+        }
+        .nitadol-card {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #b39359 0%, #6b4f2a 50%, #c9a96e 100%);
+            border-radius: 22px;
+            padding: 22px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(179,147,89,0.3);
+            margin-bottom: 24px;
+        }
+        .nitadol-card::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+        .nitadol-card::after {
+            content: '';
+            position: absolute;
+            bottom: -50px; left: -20px;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.15);
+        }
+        .card-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .card-chip-img {
+            width: 38px; height: 30px;
+            background: linear-gradient(135deg, #f9e29c, #d4af37);
+            border-radius: 5px;
+        }
+        .card-brand {
+            font-size: 16px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.9);
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+        .card-number-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 17px;
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .card-footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            z-index: 1;
+        }
+        .card-holder-name { font-size: 11px; text-transform: uppercase; color: rgba(255,255,255,0.85); font-weight: 700; }
+        .card-expiry { font-size: 11px; color: rgba(255,255,255,0.75); }
 
-        /* ME TAB */
-        .me-tab-content { padding: 20px; }
-        .me-profile-header {
-            background: linear-gradient(135deg, #0d1e35 0%, #111c2e 100%);
+        .card-details-section {
+            background: #0f172a;
+            border-radius: 18px;
             border: 1px solid rgba(179,147,89,0.2);
+            overflow: hidden;
+        }
+        .card-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .card-detail-row:last-child { border-bottom: none; }
+        .card-detail-label { font-size: 12px; color: var(--text-gray); }
+        .card-detail-val { font-size: 13px; font-weight: 600; color: #fff; }
+
+        /* ---- ME/PROFILE PAGE ---- */
+        .me-page-content {
+            padding: 70px 16px 20px;
+        }
+        .me-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 16px;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
             border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(179,147,89,0.2);
+        }
+        .me-avatar {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--gold);
+            margin-bottom: 12px;
+        }
+        .me-name { font-size: 20px; font-weight: 800; color: #fff; }
+        .me-email { font-size: 12px; color: var(--text-gray); margin-top: 4px; }
+        .me-tier { background: rgba(179,147,89,0.15); border: 1px solid var(--gold); color: var(--gold); font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 20px; margin-top: 10px; }
+
+        .me-section {
+            background: #0f172a;
+            border-radius: 18px;
+            border: 1px solid rgba(179,147,89,0.15);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .me-section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 14px 20px 10px;
+            border-bottom: 1px solid rgba(179,147,89,0.1);
+        }
+        .me-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            cursor: pointer;
+        }
+        .me-row:last-child { border-bottom: none; }
+        .me-row-left { display: flex; align-items: center; gap: 12px; }
+        .me-row-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            background: rgba(179,147,89,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 14px;
+        }
+        .me-row-label { font-size: 13px; font-weight: 600; color: #fff; }
+        .me-row-sub { font-size: 11px; color: var(--text-gray); }
+        .me-row-right { display: flex; align-items: center; gap: 8px; color: var(--text-gray); font-size: 12px; }
+        .me-row-right i { font-size: 12px; }
+
+        /* Rate Section */
+        .star-rating { display: flex; gap: 8px; justify-content: center; margin: 16px 0; }
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: rgba(179,147,89,0.3);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .star-btn.active { color: var(--gold); }
+
+        /* ---- NOTIFICATION PANEL ---- */
+        .notif-panel {
+            position: fixed;
+            top: 0; right: -100%;
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            background: #0a0f1a;
+            z-index: 9998;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 20px 16px 40px;
+        }
+        .notif-panel.open { right: 0; }
+        .notif-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0 20px;
+        }
+        .notif-panel-title { font-size: 20px; font-weight: 800; color: #fff; }
+        .notif-close {
+            background: rgba(255,255,255,0.08);
+            border: none;
+            color: #fff;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .notif-item {
+            background: #0f172a;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--gold);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .notif-item.error { border-left-color: var(--error); }
+        .notif-item.pending { border-left-color: #facc15; }
+        .notif-item.admin { border-left-color: #00bfff; }
+        .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); margin-top: 6px; flex-shrink: 0; }
+        .notif-item.error .notif-dot { background: var(--error); }
+        .notif-item.pending .notif-dot { background: #facc15; }
+        .notif-item.admin .notif-dot { background: #00bfff; }
+        .notif-msg { font-size: 13px; color: #fff; margin-bottom: 4px; font-weight: 500; }
+        .notif-time { font-size: 11px; color: var(--text-gray); }
+        .notif-empty { text-align: center; padding: 60px 20px; color: var(--text-gray); }
+        .notif-empty i { font-size: 48px; display: block; margin-bottom: 16px; color: rgba(179,147,89,0.3); }
+
+        /* ---- LOCKED MODAL ---- */
+        .locked-modal-inner {
+            text-align: center;
+            padding: 10px 0;
+        }
+        .locked-icon {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            background: rgba(179,147,89,0.1);
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 16px;
+            color: var(--gold);
+        }
+        .locked-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+        .locked-sub { font-size: 13px; color: var(--text-gray); line-height: 1.6; margin-bottom: 20px; }
+        .locked-contact {
+            background: rgba(179,147,89,0.1);
+            border: 1px solid rgba(179,147,89,0.3);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+        }
+        .locked-contact p { font-size: 12px; color: var(--text-gray); margin-bottom: 4px; }
+        .locked-contact h4 { font-size: 14px; color: var(--gold); font-weight: 700; }
+
+        /* ---- SPINNER OVERLAY ---- */
+        .spin-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 99999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .spin-overlay.show { display: flex; }
+        .spin-ring {
+            width: 60px; height: 60px;
+            border: 4px solid rgba(179,147,89,0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .spin-text { color: var(--gold); font-size: 14px; font-weight: 600; letter-spacing: 1px; }
+
+        /* ---- ACCOUNT DETAILS ---- */
+        .account-detail-box {
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px solid rgba(179,147,89,0.2);
+            margin-bottom: 10px;
+        }
+        .account-detail-box h4 { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+        .acc-field { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .acc-field:last-child { border-bottom: none; }
+        .acc-field-label { font-size: 12px; color: var(--text-gray); }
+        .acc-field-val { font-size: 13px; font-weight: 600; color: #fff; font-family: 'JetBrains Mono', monospace; }
+
+        /* HOME PAGE WRAPPER */
+        #home-page { padding-bottom: 20px; }
+        #card-page { padding: 0; }
+        #me-page { padding: 0; }
+        #finance-page { padding: 70px 16px 20px; }
+        #reward-page { padding: 70px 16px 20px; }
+
+        .page-header-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 16px 10px;
+            padding-top: 14px;
+        }
+        .page-back {
+            background: rgba(255,255,255,0.06);
+            border: none;
+            color: #fff;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .page-header-title { font-size: 18px; font-weight: 800; color: #fff; }
+
+        /* Finance Page */
+        .finance-stat-box {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border: 1px solid rgba(179,147,89,0.2);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .finance-stat-label { font-size: 12px; color: var(--text-gray); margin-bottom: 6px; }
+        .finance-stat-val { font-size: 28px; font-weight: 800; color: var(--gold); }
+        .finance-stat-change { font-size: 12px; margin-top: 4px; }
+
+        /* Reward Page */
+        .reward-banner {
+            background: linear-gradient(135deg, #b39359, #8a6f3a);
+            border-radius: 18px;
             padding: 24px;
             text-align: center;
             margin-bottom: 20px;
         }
-        .me-avatar { width:80px; height:80px; border-radius:50%; object-fit:cover; border:4px solid var(--gold); margin:0 auto 12px; display:block; }
-        .me-name { font-size:20px; font-weight:800; margin-bottom:4px; }
-        .me-tier { display:inline-block; background:rgba(179,147,89,0.2); border:1px solid var(--gold); padding:4px 14px; border-radius:20px; font-size:11px; color:var(--gold); font-weight:700; letter-spacing:1px; }
-        .me-section { background:rgba(255,255,255,0.03); border:1px solid rgba(179,147,89,0.15); border-radius:16px; padding:20px; margin-bottom:16px; }
-        .me-section-title { font-size:12px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; }
-        .me-info-row { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
-        .me-info-row:last-child { border-bottom:none; }
-        .me-info-key { font-size:13px; color:var(--text-gray); }
-        .me-info-val { font-size:13px; font-weight:600; color:var(--white); text-align:right; max-width:200px; word-break:break-all; }
-        .me-action-row { display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.05); cursor:pointer; transition:0.2s; }
-        .me-action-row:hover { background:rgba(179,147,89,0.05); border-radius:8px; padding-left:8px; }
-        .me-action-row:last-child { border-bottom:none; }
-        .me-action-left { display:flex; align-items:center; gap:12px; }
-        .me-action-icon { width:38px; height:38px; background:rgba(179,147,89,0.12); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; }
-        .me-action-text p { font-size:14px; font-weight:600; }
-        .me-action-text span { font-size:12px; color:var(--text-gray); }
-        .me-chevron { color:var(--text-gray); font-size:18px; }
-
-        /* Star rating */
-        .star-rating { display:flex; gap:8px; justify-content:center; margin:12px 0; }
-        .star { font-size:32px; cursor:pointer; transition:0.2s; color:#334155; }
-        .star.active, .star:hover { color:#e5c07b; transform:scale(1.15); }
-
-        /* FINANCE TAB */
-        .finance-tab-content { padding: 20px; }
-        .finance-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
-        .finance-stat { background:rgba(255,255,255,0.03); border:1px solid rgba(179,147,89,0.15); border-radius:16px; padding:16px; }
-        .finance-stat p { font-size:11px; color:var(--text-gray); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.8px; }
-        .finance-stat h3 { font-size:22px; font-weight:800; }
-        .finance-stat .trend { font-size:12px; margin-top:4px; }
-
-        /* REWARD TAB */
-        .reward-tab-content { padding: 20px; }
-        .reward-hero { background:linear-gradient(135deg,#b39359,#8a6d3f); border-radius:20px; padding:28px; text-align:center; margin-bottom:20px; }
-        .reward-hero h2 { font-size:28px; font-weight:900; color:#000; margin-bottom:8px; }
-        .reward-hero p { font-size:14px; color:rgba(0,0,0,0.7); }
-        .reward-points { font-size:52px; font-weight:900; color:#000; margin:10px 0; }
-        .reward-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-        .reward-item { background:rgba(179,147,89,0.1); border:1px solid rgba(179,147,89,0.2); border-radius:14px; padding:16px; text-align:center; cursor:pointer; transition:0.3s; }
-        .reward-item:hover { border-color:var(--gold); background:rgba(179,147,89,0.2); }
-        .reward-item span { display:block; font-size:28px; margin-bottom:8px; }
-        .reward-item p { font-size:12px; color:var(--gold); font-weight:700; }
-
-        /* Notification Panel */
-        .notif-panel {
-            position: fixed; top: 0; right: -100%; width: min(380px, 100%); height: 100%;
-            background: #0a1322; z-index: 10000;
-            border-left: 1px solid rgba(179,147,89,0.3);
-            transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
-            overflow-y: auto;
-            padding: 20px;
+        .reward-pts { font-size: 48px; font-weight: 900; color: #fff; }
+        .reward-pts-label { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+        .reward-item {
+            background: #0f172a;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid rgba(179,147,89,0.1);
         }
-        .notif-panel.open { right: 0; }
-        .notif-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:none; }
-        .notif-overlay.show { display:block; }
-        .notif-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-top:30px; }
-        .notif-header h2 { color:var(--gold); font-size:20px; }
-        .notif-close { background:none; border:none; color:var(--white); font-size:24px; cursor:pointer; }
-        .notif-item { background:rgba(255,255,255,0.04); border:1px solid rgba(179,147,89,0.15); border-radius:14px; padding:16px; margin-bottom:12px; cursor:pointer; transition:0.2s; }
-        .notif-item:hover { border-color:var(--gold); }
-        .notif-item.unread { border-left:3px solid var(--gold); }
-        .notif-item-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
-        .notif-item-title { font-size:14px; font-weight:700; }
-        .notif-item-time { font-size:11px; color:var(--text-gray); }
-        .notif-item-body { font-size:13px; color:var(--text-gray); line-height:1.5; }
-        .notif-item.tx-notif .notif-item-title { color: var(--gold); }
-        .notif-item.msg-notif .notif-item-title { color: #60a5fa; }
-        .notif-empty { text-align:center; padding:60px 20px; color:var(--text-gray); }
-        .notif-empty span { display:block; font-size:48px; margin-bottom:12px; }
+        .reward-item-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            background: rgba(179,147,89,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+        .reward-item h4 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+        .reward-item p { font-size: 11px; color: var(--text-gray); }
+        .reward-pts-small { margin-left: auto; font-size: 14px; font-weight: 800; color: var(--gold); white-space: nowrap; }
 
-        /* Account Details section in Me tab */
-        .acct-detail-copy { display:flex; align-items:center; gap:8px; }
-        .copy-btn { background:rgba(179,147,89,0.15); border:1px solid rgba(179,147,89,0.3); border-radius:8px; padding:4px 10px; font-size:11px; color:var(--gold); cursor:pointer; font-weight:700; transition:0.2s; }
-        .copy-btn:hover { background:rgba(179,147,89,0.3); }
+        /* Transfer page */
+        .transfer-form {
+            padding: 70px 16px 20px;
+        }
+        .tf-label { font-size: 12px; font-weight: 700; color: var(--text-gray); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tf-input {
+            width: 100%; padding: 14px 16px; background: #0f172a;
+            border: 1px solid rgba(179,147,89,0.3); border-radius: 12px;
+            color: #fff; font-size: 14px; outline: none; margin-bottom: 16px;
+        }
+        .tf-input:focus { border-color: var(--gold); }
 
+        /* Responsive */
+        @media (max-width: 480px) {
+            #new-dash { max-width: 100%; }
+            .bottom-nav { max-width: 100%; }
+            .notif-panel { max-width: 100%; }
+        }
         @media (max-width:768px) {
+            nav { padding:12px 4%; }
+            .logo { font-size:16px; }
+            .hero { padding:120px 20px 60px; }
+            .hero h1 { font-size:42px; letter-spacing:-1px; line-height:1.1; }
+            .hero p { font-size:16px !important; padding:0 10px; }
+            .hero div[style*="display: flex"] { flex-direction:column; align-items:center; width:100%; }
+            .hero .primary-btn { width:100% !important; max-width:320px; }
+            .section-container { padding:80px 20px; }
+            .image-gallery { grid-template-columns:1fr; }
+            .gallery-item { height:220px; }
+            .service-grid { grid-template-columns:1fr; }
+            .section-container div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns:1fr !important; }
+            .section-container div[style*="grid-template-columns: 1fr 1fr"] .gallery-item { height:250px; border-radius:20px; }
+            .partner-logo { width:180px; font-size:12px; }
+            #new-dash { padding-bottom:80px; }
+            .modal-content { max-width:95%; padding:25px; }
             .history-table th, .history-table td { font-size:11px; padding:8px 4px; }
-            .services-grid { grid-template-columns:repeat(4,1fr); }
-            .finance-stat-grid { grid-template-columns:1fr 1fr; }
+            .history-table { min-width:100% !important; table-layout:fixed; }
+            .status-fail, .status-pending { font-size:10px; }
         }
         @media (max-width:480px) {
-            .services-grid { grid-template-columns:repeat(4,1fr); }
-            .balance-amount { font-size:28px; }
-            .service-btn .svc-label { font-size:9px; }
+            .hero h1 { font-size:32px; }
+            .hero p { font-size:14px !important; }
+            .ticker { font-size:10px; }
+            .primary-btn { padding:14px; font-size:12px; }
         }
     </style>
 </head>
 <body id="bodyTag">
 
-<!-- FULL PAGE LOADING OVERLAY -->
-<div id="loadingOverlay">
-    <div class="big-spinner"></div>
-    <p id="loadingMsg">AUTHENTICATING...</p>
+<!-- ===== SPINNER OVERLAY ===== -->
+<div class="spin-overlay" id="spinOverlay">
+    <div class="spin-ring"></div>
+    <p class="spin-text" id="spinText">AUTHENTICATING...</p>
 </div>
 
-<!-- NOTIFICATION OVERLAY & PANEL -->
-<div class="notif-overlay" id="notifOverlay" onclick="closeNotifPanel()"></div>
-<div class="notif-panel" id="notifPanel">
-    <div class="notif-header">
-        <h2>Notifications</h2>
-        <button class="notif-close" onclick="closeNotifPanel()">✕</button>
-    </div>
-    <div id="notifList">
-        <div class="notif-empty">
-            <span>🔔</span>
-            <p>No notifications yet</p>
-        </div>
-    </div>
-</div>
-
+<!-- ===== NAV ===== -->
 <nav>
     <a href="#" class="logo">NITADOL <span>BANK</span></a>
-    <div style="display:flex; align-items:center; gap:10px;">
-        <div class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span></div>
-        <button class="primary-btn" style="padding:8px 15px; width:auto;" onclick="showLoadingThen('loginMod')">Client Login</button>
+    <div style="display:flex; align-items: center; gap: 10px;">
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <span id="themeIcon">🌙</span>
+        </div>
+        <button class="primary-btn" style="padding: 8px 15px; width: auto;" onclick="toggleModal('loginMod')">Client Login</button>
     </div>
 </nav>
 
-<!-- MAIN MARKETING SITE -->
+<!-- ===== MAIN WEBSITE ===== -->
 <div id="main-site">
     <div class="ticker-wrap">
-        <div class="ticker">BTC/USD $102,432.20 ▲ 3.1% | GOLD/OZ $2,442.10 ▲ 1.2% | EUR/USD 1.0821 ▼ 0.05% | NITADOL ASSET INDEX ▲ 4.8% | XAU/USD $2,310.45 ▲ 0.8% | S&P 500 ▲ 1.1%</div>
+        <div class="ticker">
+            BTC/USD $102,432.20 ▲ 3.1% | GOLD/OZ $2,442.10 ▲ 1.2% | EUR/USD 1.0821 ▼ 0.05% | NITADOL ASSET INDEX ▲ 4.8% | XAU/USD $2,310.45 ▲ 0.8% | S&P 500 ▲ 1.1%
+        </div>
     </div>
     <section class="hero">
-        <div style="margin-bottom:20px;border:1px solid var(--gold);padding:5px 15px;border-radius:50px;font-size:12px;letter-spacing:2px;color:var(--gold);">ESTABLISHED 1977 • ZURICH</div>
+        <div style="margin-bottom: 20px; border: 1px solid var(--gold); padding: 5px 15px; border-radius: 50px; font-size: 12px; letter-spacing: 2px; color: var(--gold);">ESTABLISHED 1977 • ZURICH</div>
         <h1>The Future of <br><span>Wealth Sovereignty.</span></h1>
-        <p style="max-width:700px;color:var(--text-gray);font-size:20px;margin-top:20px;font-weight:300;">Institutional-grade custody for the world's most significant digital and physical assets. Secure your legacy in the global ledger.</p>
-        <div style="display:flex;gap:15px;margin-top:40px;">
-            <button class="primary-btn" style="width:250px;" onclick="showLoadingThen('regMod')">Open Private Vault</button>
-            <button class="primary-btn" style="width:200px;background:transparent;border:1px solid var(--white);color:var(--white);" onclick="window.scrollTo(0,1500)">Explore Services</button>
+        <p style="max-width:700px; color:var(--text-gray); font-size:20px; margin-top:20px; font-weight: 300;">Institutional-grade custody for the world's most significant digital and physical assets. Secure your legacy in the global ledger.</p>
+        <div style="display: flex; gap: 15px; margin-top: 40px;">
+            <button class="primary-btn" style="width:250px;" onclick="toggleModal('regMod')">Open Private Vault</button>
+            <button class="primary-btn" style="width:200px; background: transparent; border: 1px solid var(--white); color: var(--white);" onclick="window.scrollTo(0, 1500)">Explore Services</button>
         </div>
     </section>
     <div class="partner-section">
-        <div style="text-align:center;color:var(--text-gray);font-size:10px;letter-spacing:3px;margin-bottom:30px;font-weight:700;">STRATEGIC LIQUIDITY PARTNERS</div>
+        <div style="text-align: center; color: var(--text-gray); font-size: 10px; letter-spacing: 3px; margin-bottom: 30px; font-weight: 700;">STRATEGIC LIQUIDITY PARTNERS</div>
         <div class="partner-track">
             <div class="partner-logo">J.P. MORGAN</div><div class="partner-logo">HSBC PRIVATE</div><div class="partner-logo">UBS GROUP</div>
             <div class="partner-logo">GOLDMAN SACHS</div><div class="partner-logo">BARCLAYS</div><div class="partner-logo">DEUTSCHE BANK</div>
@@ -555,12 +876,12 @@
             <div class="partner-logo">GOLDMAN SACHS</div><div class="partner-logo">BARCLAYS</div><div class="partner-logo">DEUTSCHE BANK</div>
         </div>
     </div>
-    <section class="section-container" style="background:var(--navy-mural);">
-        <div style="max-width:1200px;margin:0 auto;">
-            <h2 style="font-size:40px;text-align:center;">Bespoke <span>Banking</span></h2>
+    <section class="section-container" style="background: var(--navy-mural);">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="font-size: 40px; text-align: center;">Bespoke <span>Banking</span></h2>
             <section class="rates-section">
                 <h2 style="font-size:40px;">Global <span>Asset Rates</span></h2>
-                <p style="color:var(--text-gray);margin-top:10px;">Real-time institutional pricing for major markets.</p>
+                <p style="color:var(--text-gray); margin-top:10px;">Real-time institutional pricing for major markets.</p>
                 <div class="rates-grid">
                     <div class="rate-card"><h3>Bitcoin</h3><div class="rate-price">$102,432</div><p style="color:var(--success)">▲ +3.1%</p></div>
                     <div class="rate-card"><h3>Ethereum</h3><div class="rate-price">$4,812</div><p style="color:var(--success)">▲ +2.4%</p></div>
@@ -571,23 +892,23 @@
                 </div>
             </section>
             <div class="image-gallery">
-                <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000');"></div>
-                <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=1000');"></div>
-                <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1556742049-1347356a65ee?q=80&w=1000');"></div>
-                <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1000');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=1000');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1556742049-1347356a65ee?q=80&w=1000');"></div>
+                <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1000');"></div>
             </div>
             <div class="service-grid">
-                <div class="service-card glass-effect"><h3>Digital Custody</h3><p style="color:var(--text-gray);">Cold-storage multi-signature architecture for Bitcoin, Ethereum, and stablecoins.</p></div>
-                <div class="service-card glass-effect"><h3>Private Wealth</h3><p style="color:var(--text-gray);">Offshore portfolio management and tax-advantaged wealth preservation strategies.</p></div>
-                <div class="service-card glass-effect"><h3>Lending Solutions</h3><p style="color:var(--text-gray);">Instant liquidity against your digital assets without triggering capital gains.</p></div>
+                <div class="service-card glass-effect"><h3>Digital Custody</h3><p style="color: var(--text-gray);">Cold-storage multi-signature architecture for Bitcoin, Ethereum, and stablecoins.</p></div>
+                <div class="service-card glass-effect"><h3>Private Wealth</h3><p style="color: var(--text-gray);">Offshore portfolio management and tax-advantaged wealth preservation strategies.</p></div>
+                <div class="service-card glass-effect"><h3>Lending Solutions</h3><p style="color: var(--text-gray);">Instant liquidity against your digital assets without triggering capital gains.</p></div>
             </div>
         </div>
     </section>
     <section class="section-container">
-        <h2 style="text-align:center;margin-bottom:20px;">Elite <span>Infrastructure</span></h2>
-        <section class="section-container" style="background:var(--navy-mural);text-align:center;">
+        <h2 style="text-align: center; margin-bottom: 20px;">Elite <span>Infrastructure</span></h2>
+        <section class="section-container" style="background:var(--navy-mural); text-align:center;">
             <h2 style="font-size:40px;">Institutional <span>Trust</span></h2>
-            <p style="max-width:800px;margin:20px auto;color:var(--text-gray);font-size:18px;">Nitadol Bank operates under private wealth infrastructure standards developed in Switzerland and Luxembourg. Our vault architecture integrates physical bullion custody, digital asset cold storage, and private banking services for high-net-worth individuals, family offices, and sovereign wealth clients.</p>
+            <p style="max-width:800px; margin:20px auto; color:var(--text-gray); font-size:18px;">Nitadol Bank operates under private wealth infrastructure standards developed in Switzerland and Luxembourg. Our vault architecture integrates physical bullion custody, digital asset cold storage, and private banking services for high-net-worth individuals, family offices, and sovereign wealth clients.</p>
             <div class="image-gallery">
                 <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000');"></div>
                 <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000');"></div>
@@ -595,13 +916,13 @@
                 <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1000');"></div>
             </div>
         </section>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
             <div>
-                <p style="font-size:18px;color:var(--text-gray);">Our facilities are built into the Swiss Alps, utilizing military-grade biometric access and EMP-shielded server rooms. We provide the world's most secure environment for high-net-worth individuals to manage their global footprint.</p>
+                <p style="font-size: 18px; color: var(--text-gray);">Our facilities are built into the Swiss Alps, utilizing military-grade biometric access and EMP-shielded server rooms. We provide the world's most secure environment for high-net-worth individuals to manage their global footprint.</p>
                 <br>
-                <p style="font-size:18px;color:var(--text-gray);">Bridging the gap between traditional bullion and modern digital assets, we represent the pinnacle of financial privacy since 1977.</p>
+                <p style="font-size: 18px; color: var(--text-gray);">Bridging the gap between traditional bullion and modern digital assets, we represent the pinnacle of financial privacy since 1977.</p>
             </div>
-            <div class="gallery-item" style="height:400px;background-image:url('https://images.unsplash.com/photo-1554469384-e58fac16e23a?q=80&w=1000');border-radius:50px 0 50px 0;"></div>
+            <div class="gallery-item" style="height: 400px; background-image: url('https://images.unsplash.com/photo-1554469384-e58fac16e23a?q=80&w=1000'); border-radius: 50px 0 50px 0;"></div>
         </div>
     </section>
     <section class="testimonial-section">
@@ -614,435 +935,577 @@
     </section>
     <section class="world-map">
         <h2 style="font-size:40px;">Global <span>Banking Network</span></h2>
-        <p style="color:var(--text-gray);margin-top:15px;">Nitadol maintains secure vault infrastructure across major financial centers.</p>
+        <p style="color:var(--text-gray); margin-top:15px;">Nitadol maintains secure vault infrastructure across major financial centers.</p>
         <div class="map-container">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg">
-            <div class="map-dot dot-zurich"></div><div class="map-dot dot-london"></div>
-            <div class="map-dot dot-singapore"></div><div class="map-dot dot-newyork"></div><div class="map-dot dot-dubai"></div>
+            <div class="map-dot dot-zurich"></div>
+            <div class="map-dot dot-london"></div>
+            <div class="map-dot dot-singapore"></div>
+            <div class="map-dot dot-newyork"></div>
+            <div class="map-dot dot-dubai"></div>
         </div>
     </section>
-    <section class="section-container" id="contact" style="text-align:center;">
-        <h2 style="margin-bottom:20px;">Global <span>Concierge</span></h2>
-        <p style="color:var(--text-gray);margin-bottom:30px;">Available 24/7 for Global Tier Clients via secure encrypted channels.</p>
-        <div style="margin-top:40px;color:var(--gold);font-size:24px;font-weight:700;">nitadolb@gmail.com</div>
+    <section class="section-container" id="contact" style="text-align: center;">
+        <h2 style="margin-bottom: 20px;">Global <span>Concierge</span></h2>
+        <p style="color: var(--text-gray); margin-bottom: 30px;">Available 24/7 for Global Tier Clients via secure encrypted channels.</p>
+        <div style="margin-top:40px; color:var(--gold); font-size: 24px; font-weight: 700;">nitadolb@gmail.com</div>
     </section>
-    <section class="section-container extra-section glass-effect" style="background:transparent;padding:100px 8%;">
-        <div style="max-width:1200px;margin:0 auto;text-align:center;">
-            <h2 class="mature-header" style="font-size:40px;margin-bottom:15px;">Liquid <span>Glass Architecture</span></h2>
-            <p style="max-width:720px;margin:0 auto 40px;color:var(--text-gray);font-size:18px;">Experience the pinnacle of modern private banking with our signature liquid glass interface — transparent, secure, and fluid like the assets you protect.</p>
-            <div class="image-gallery" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
-                <div class="gallery-item liquid-glass" style="background-image:url('https://images.unsplash.com/photo-1554224155-6726b6c2f8c4?q=80&w=1000');height:340px;"></div>
-                <div class="gallery-item liquid-glass" style="background-image:url('https://images.unsplash.com/photo-1617791160505-6f00504e3519?q=80&w=1000');height:340px;"></div>
-                <div class="gallery-item liquid-glass" style="background-image:url('https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1000');height:340px;"></div>
+    <section class="section-container extra-section glass-effect" style="background: transparent; padding: 100px 8%;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+            <h2 class="mature-header" style="font-size: 40px; margin-bottom: 15px;">Liquid <span>Glass Architecture</span></h2>
+            <p style="max-width: 720px; margin: 0 auto 40px; color: var(--text-gray); font-size: 18px;">Experience the pinnacle of modern private banking with our signature liquid glass interface — transparent, secure, and fluid like the assets you protect.</p>
+            <div class="image-gallery" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                <div class="gallery-item liquid-glass" style="background-image: url('https://images.unsplash.com/photo-1554224155-6726b6c2f8c4?q=80&w=1000'); height: 340px;"></div>
+                <div class="gallery-item liquid-glass" style="background-image: url('https://images.unsplash.com/photo-1617791160505-6f00504e3519?q=80&w=1000'); height: 340px;"></div>
+                <div class="gallery-item liquid-glass" style="background-image: url('https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1000'); height: 340px;"></div>
             </div>
-            <div style="margin-top:40px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;">
-                <div onclick="showVaultTour()" class="explore-card glass-effect" style="padding:25px 35px;border-radius:20px;max-width:320px;text-align:left;"><h4 style="color:var(--gold);">Vault Tour</h4><p style="color:var(--text-gray);">Interactive 3D liquid glass vault experience</p></div>
-                <div onclick="showSecurityProtocol()" class="explore-card glass-effect" style="padding:25px 35px;border-radius:20px;max-width:320px;text-align:left;"><h4 style="color:var(--gold);">Security Protocol</h4><p style="color:var(--text-gray);">Military-grade EMP shielding & biometric liquid glass access</p></div>
+            <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <div onclick="showVaultTour()" class="explore-card glass-effect" style="padding: 25px 35px; border-radius: 20px; max-width: 320px; text-align: left;"><h4 style="color: var(--gold);">Vault Tour</h4><p style="color: var(--text-gray);">Interactive 3D liquid glass vault experience</p></div>
+                <div onclick="showSecurityProtocol()" class="explore-card glass-effect" style="padding: 25px 35px; border-radius: 20px; max-width: 320px; text-align: left;"><h4 style="color: var(--gold);">Security Protocol</h4><p style="color: var(--text-gray);">Military-grade EMP shielding &amp; biometric liquid glass access</p></div>
             </div>
         </div>
     </section>
     <section class="section-container market-board">
-        <h2 class="mature-header" style="font-size:40px;text-align:center;margin-bottom:20px;">Market <span>Insights & Portfolio</span></h2>
+        <h2 class="mature-header" style="font-size:40px; text-align:center; margin-bottom:20px;">Market <span>Insights &amp; Portfolio</span></h2>
         <div class="market-grid">
-            <div class="market-item glass-effect explore-card" onclick="toggleModal('portfolioMod')"><h3>Private Equity</h3><div class="market-price">18.4% YTD</div><p style="color:var(--success);font-size:13px;">Stable • Institutional</p></div>
-            <div class="market-item glass-effect explore-card" onclick="toggleModal('portfolioMod')"><h3>Real Estate Tokenization</h3><div class="market-price">€14.2M</div><p style="color:var(--success);font-size:13px;">Fully Liquid</p></div>
-            <div class="market-item glass-effect explore-card" onclick="toggleModal('portfolioMod')"><h3>Gold-Backed Stablecoins</h3><div class="market-price">+2.9%</div><p style="color:var(--success);font-size:13px;">Hedge • Secure</p></div>
-            <div class="market-item glass-effect explore-card" onclick="toggleModal('portfolioMod')"><h3>Family Office Allocation</h3><div class="market-price">€87M AUM</div><p style="color:var(--gold);font-size:13px;">Your Tier</p></div>
+            <div class="market-item glass-effect explore-card" onclick="toggleModal('portfolioMod')"><h3>Private Equity</h3><div class="market-price">18.4% YTD</div><p style="color:var(--success); font-size:13px;">Stable • Institutional</p></div>
+            <div class="market-item glass-effect explore-card" onclick="toggleModal('portfolioMod')"><h3>Real Estate Tokenization</h3><div class="market-price">€14.2M</div><p style="color:var(--success); font-size:13px;">Fully Liquid</p></div>
+            <div class="market-item glass-effect explore-card" onclick="toggleModal('portfolioMod')"><h3>Gold-Backed Stablecoins</h3><div class="market-price">+2.9%</div><p style="color:var(--success); font-size:13px;">Hedge • Secure</p></div>
+            <div class="market-item glass-effect explore-card" onclick="toggleModal('portfolioMod')"><h3>Family Office Allocation</h3><div class="market-price">€87M AUM</div><p style="color:var(--gold); font-size:13px;">Your Tier</p></div>
         </div>
     </section>
-    <section style="background:#000;padding:60px 8%;text-align:center;border-top:1px solid var(--gold-glow);">
-        <p style="color:var(--text-gray);font-size:13px;letter-spacing:2px;">NITADOL BANK • PRIVATE WEALTH • EST. 1977 • ZURICH • GLOBAL LIQUID GLASS CUSTODY</p>
-        <div style="margin-top:20px;font-size:11px;color:var(--gold);">Confidential • Secure • Sovereign</div>
+    <section class="section-container" style="background:var(--navy-mural);">
+        <h2 style="text-align:center; font-size:40px;" class="mature-header">Explore <span>Deeper</span></h2>
+        <div style="max-width:1200px; margin:40px auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:25px;">
+            <div onclick="showFullHistory()" class="explore-card glass-effect" style="padding:35px; border-radius:20px;"><div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:15px;"><h3 style="color:var(--gold);">Transaction History</h3><i class="fas fa-scroll" style="font-size:28px; color:var(--gold);"></i></div><p style="color:var(--text-gray);">View every movement across your global ledger. Click to expand full archive with AI insights.</p><div style="margin-top:20px; font-size:12px; color:var(--gold); font-weight:700;">12 TRANSACTIONS • LAST 90 DAYS</div></div>
+            <div onclick="showPerformance()" class="explore-card glass-effect" style="padding:35px; border-radius:20px;"><div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:15px;"><h3 style="color:var(--gold);">Performance Dashboard</h3><i class="fas fa-chart-line" style="font-size:28px; color:var(--gold);"></i></div><p style="color:var(--text-gray);">Real-time portfolio analytics with liquid glass visualization.</p><div style="margin-top:20px; color:var(--success); font-weight:700;">+11.7% THIS QUARTER</div></div>
+            <div onclick="showLegacy()" class="explore-card glass-effect" style="padding:35px; border-radius:20px;"><div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:15px;"><h3 style="color:var(--gold);">Legacy Planning</h3><i class="fas fa-landmark" style="font-size:28px; color:var(--gold);"></i></div><p style="color:var(--text-gray);">Multi-generational wealth structuring with Swiss private trust integration.</p></div>
+        </div>
+    </section>
+    <section style="background:#000; padding:60px 8%; text-align:center; border-top:1px solid var(--gold-glow);">
+        <p style="color:var(--text-gray); font-size:13px; letter-spacing:2px;">NITADOL BANK • PRIVATE WEALTH • EST. 1977 • ZURICH • GLOBAL LIQUID GLASS CUSTODY</p>
+        <div style="margin-top:20px; font-size:11px; color:var(--gold);">Confidential • Secure • Sovereign</div>
     </section>
 </div>
 
-<!-- ================================================================ -->
-<!--           NEW OPAY-STYLE DASHBOARD                               -->
-<!-- ================================================================ -->
-<div id="dash-view">
-    <!-- TOP BAR -->
-    <div class="dash-topbar">
-        <div class="dash-topbar-inner">
-            <div class="dash-user-left">
-                <div class="dash-avatar-wrap">
-                    <img id="dashAvatar" class="dash-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+<!-- ===== NEW OPAY-STYLE DASHBOARD ===== -->
+<div id="new-dash">
+
+    <!-- HOME PAGE -->
+    <div id="home-page" class="dash-page active">
+        <!-- TOP CARD -->
+        <div class="dash-header-card">
+            <div class="dash-top-bar">
+                <div class="dash-profile-row">
+                    <img id="dashAvatarSm" class="dash-avatar-sm" src="https://i.pinimg.com/1200x/e4/ba/cd/e4bacd619803941c5488a4d2d6b9f986.jpg" alt="Profile">
+                    <div>
+                        <div class="dash-greeting">Good day,</div>
+                        <div class="dash-username" id="dashWelcomeName">Loading...</div>
+                    </div>
                 </div>
-                <div class="dash-user-info">
-                    <h3 id="dashGreeting">Welcome back</h3>
-                    <p id="dashSubtitle">GOLD TIER • Verified</p>
-                </div>
+                <button class="notif-btn" onclick="openNotifPanel()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notif-badge" id="notifBadge">0</span>
+                </button>
             </div>
-            <div class="dash-top-right">
-                <div class="notif-btn" onclick="openNotifPanel()" id="notifBtn">
-                    🔔
-                    <div class="notif-badge" id="notifBadge">0</div>
+
+            <!-- BALANCE -->
+            <div class="balance-section">
+                <div class="balance-label">Total Vault Balance</div>
+                <div class="balance-amount-row">
+                    <div class="balance-amount" id="dashBalance">€0.00</div>
+                    <button class="eye-toggle" onclick="toggleBalanceVisibility()" id="eyeBtn">
+                        <i class="fas fa-eye" id="eyeIcon"></i>
+                    </button>
                 </div>
-                <button onclick="signOutUser()" style="background:rgba(179,147,89,0.15);border:1px solid rgba(179,147,89,0.3);border-radius:10px;padding:8px 14px;color:var(--gold);font-size:12px;font-weight:700;cursor:pointer;">LOGOUT</button>
+                <div class="balance-sub" id="dashAccId">Account: NTD-000000</div>
+                <div class="balance-actions">
+                    <button class="bal-action-btn add" onclick="toggleModal('addMoneyMod')">
+                        <i class="fas fa-plus"></i> Add Money
+                    </button>
+                    <button class="bal-action-btn transfer" onclick="showTransferPage()">
+                        <i class="fas fa-paper-plane"></i> Transfer
+                    </button>
+                </div>
             </div>
         </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="dash-section">
+            <div class="section-title"><i class="fas fa-bolt"></i> Quick Services</div>
+            <div class="quick-grid">
+                <div class="quick-item" onclick="showLocked('Airtime Top-Up')">
+                    <div class="quick-icon"><i class="fas fa-mobile-alt" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Airtime</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Data Bundle')">
+                    <div class="quick-icon"><i class="fas fa-wifi" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Data Bundle</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('TV Subscription')">
+                    <div class="quick-icon"><i class="fas fa-tv" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">TV Sub</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Electricity & Utilities')">
+                    <div class="quick-icon"><i class="fas fa-bolt" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Utilities</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Safe Box — Secure Vault Storage')">
+                    <div class="quick-icon"><i class="fas fa-safe" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Safe Box</div>
+                </div>
+                <div class="quick-item" onclick="toggleModal('loanMod')">
+                    <div class="quick-icon"><i class="fas fa-hand-holding-usd" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Loan</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Play4aChild — Children\'s Education Fund')">
+                    <div class="quick-icon"><i class="fas fa-child" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Play4aChild</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('More Services')">
+                    <div class="quick-icon"><i class="fas fa-th" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">More</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIFESTYLE SECTION -->
+        <div class="dash-section" style="margin-top:20px;">
+            <div class="section-title"><i class="fas fa-globe-europe"></i> European Lifestyle</div>
+            <div class="quick-grid">
+                <div class="quick-item" onclick="showLocked('Book a Flight')">
+                    <div class="quick-icon"><i class="fas fa-plane" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Book Flight</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Hotel Reservations')">
+                    <div class="quick-icon"><i class="fas fa-hotel" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Hotels</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Travel Insurance')">
+                    <div class="quick-icon"><i class="fas fa-shield-alt" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Insurance</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Luxury Cars & Transfers')">
+                    <div class="quick-icon"><i class="fas fa-car" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Car Hire</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Private Yacht Charter')">
+                    <div class="quick-icon"><i class="fas fa-ship" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Yacht</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Fine Dining Reservations')">
+                    <div class="quick-icon"><i class="fas fa-utensils" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Dining</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Luxury Shopping')">
+                    <div class="quick-icon"><i class="fas fa-shopping-bag" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Shopping</div>
+                </div>
+                <div class="quick-item" onclick="showLocked('Concierge Service')">
+                    <div class="quick-icon"><i class="fas fa-concierge-bell" style="color:#b39359; font-size:20px;"></i></div>
+                    <div class="quick-label">Concierge</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GROW SAVINGS BANNER -->
+        <div class="dash-section" style="margin-top:20px;">
+            <div class="savings-banner" onclick="showLocked('Grow Your Savings — Fixed Yield Vault')">
+                <div class="savings-icon">
+                    <i class="fas fa-gift" style="color:#fff; font-size:22px;"></i>
+                </div>
+                <div class="savings-text">
+                    <h4>Grow Your Savings</h4>
+                    <p>Up to 12% annual yield on fixed vault deposits</p>
+                </div>
+                <div class="savings-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+
+        <!-- MARKET SNAPSHOT -->
+        <div class="dash-section" style="margin-top:20px;">
+            <div class="section-title"><i class="fas fa-chart-bar"></i> Live Markets</div>
+            <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:8px;">
+                <div style="background:#0f172a; padding:12px 16px; border-radius:12px; min-width:130px; flex-shrink:0; border:1px solid rgba(179,147,89,0.15);">
+                    <p style="font-size:10px; color:var(--text-gray); margin-bottom:4px;">BITCOIN</p>
+                    <p style="font-size:16px; font-weight:700; color:#fff;">$102,432</p>
+                    <p style="font-size:11px; color:var(--success);">▲ +3.1%</p>
+                </div>
+                <div style="background:#0f172a; padding:12px 16px; border-radius:12px; min-width:130px; flex-shrink:0; border:1px solid rgba(179,147,89,0.15);">
+                    <p style="font-size:10px; color:var(--text-gray); margin-bottom:4px;">ETHEREUM</p>
+                    <p style="font-size:16px; font-weight:700; color:#fff;">$4,812</p>
+                    <p style="font-size:11px; color:var(--success);">▲ +2.4%</p>
+                </div>
+                <div style="background:#0f172a; padding:12px 16px; border-radius:12px; min-width:130px; flex-shrink:0; border:1px solid rgba(179,147,89,0.15);">
+                    <p style="font-size:10px; color:var(--text-gray); margin-bottom:4px;">GOLD/OZ</p>
+                    <p style="font-size:16px; font-weight:700; color:var(--gold);">$2,442</p>
+                    <p style="font-size:11px; color:var(--gold);">▲ +1.2%</p>
+                </div>
+                <div style="background:#0f172a; padding:12px 16px; border-radius:12px; min-width:130px; flex-shrink:0; border:1px solid rgba(179,147,89,0.15);">
+                    <p style="font-size:10px; color:var(--text-gray); margin-bottom:4px;">EUR/USD</p>
+                    <p style="font-size:16px; font-weight:700; color:#fff;">1.0821</p>
+                    <p style="font-size:11px; color:#facc15;">▼ -0.05%</p>
+                </div>
+            </div>
+        </div>
+        <div style="height:20px;"></div>
     </div>
 
-    <!-- TAB PAGES -->
-    <!-- HOME TAB -->
-    <div class="dash-tab active" id="tab-home">
-        <!-- Balance Card -->
-        <div class="balance-card" id="balanceCard">
-            <div class="balance-label">Total Vault Balance</div>
-            <div class="balance-amount-row">
-                <div class="balance-amount" id="dashBalance">€0.00</div>
-                <button class="eye-btn" id="eyeBtn" onclick="toggleBalance()">👁️</button>
+    <!-- CARD PAGE -->
+    <div id="card-page" class="dash-page">
+        <div class="card-page-content">
+            <div class="page-header-bar">
+                <div class="page-header-title">My Card</div>
             </div>
-            <div class="balance-card-actions">
-                <div class="bal-action-btn" onclick="toggleModal('transMod')">
-                    <span>➕</span>Add Money
-                </div>
-                <div class="bal-action-btn" onclick="toggleModal('transMod')">
-                    <span>📤</span>Transfer
-                </div>
-                <div class="bal-action-btn" onclick="toggleModal('transMod')">
-                    <span>💸</span>Withdraw
-                </div>
-                <div class="bal-action-btn" onclick="showLockedMsg()">
-                    <span>💱</span>Exchange
-                </div>
-            </div>
-            <div class="balance-card-id">Account ID: <span id="dashAcctID">NTD-000000</span></div>
-        </div>
 
-        <!-- Quick Services -->
-        <div class="services-section">
-            <div class="services-section-title">Quick Services</div>
-            <div class="services-grid">
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">📱</span><span class="svc-label">Airtime</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">⚡</span><span class="svc-label">Recharge</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">📡</span><span class="svc-label">Data</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">📺</span><span class="svc-label">TV / Cable</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🏠</span><span class="svc-label">Utilities</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🏦</span><span class="svc-label">Loan</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🔐</span><span class="svc-label">SafeBox</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🎮</span><span class="svc-label">Play4Child</span></div>
-            </div>
-        </div>
-
-        <!-- Lifestyle Services -->
-        <div class="services-section">
-            <div class="services-section-title">Lifestyle & Europe</div>
-            <div class="services-grid">
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">✈️</span><span class="svc-label">Book Flight</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🏨</span><span class="svc-label">Hotels</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🚗</span><span class="svc-label">Car Hire</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🎟️</span><span class="svc-label">Events</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🏥</span><span class="svc-label">Insurance</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">📦</span><span class="svc-label">Courier</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🎓</span><span class="svc-label">Education</span></div>
-                <div class="service-btn" onclick="showLockedMsg()"><span class="svc-icon">🌐</span><span class="svc-label">More</span></div>
-            </div>
-        </div>
-
-        <!-- Grow Your Savings -->
-        <div class="savings-section" onclick="showLockedMsg()">
-            <div class="savings-icon">🎁</div>
-            <div class="savings-text">
-                <h3>Grow Your Savings</h3>
-                <p>Earn up to 12% p.a. on vault deposits. Start with as little as €100.</p>
-            </div>
-            <div class="savings-arrow">›</div>
-        </div>
-
-        <!-- Market Snapshot -->
-        <div style="margin:16px;">
-            <div class="services-section-title" style="padding-left:4px;">Live Market</div>
-            <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;">
-                <div style="background:rgba(179,147,89,0.08);border:1px solid rgba(179,147,89,0.2);border-radius:14px;padding:14px 18px;min-width:140px;flex-shrink:0;text-align:center;">
-                    <p style="font-size:11px;color:var(--text-gray);">BTC</p>
-                    <p style="font-size:20px;font-weight:800;color:var(--success);">$102,432</p>
-                    <p style="font-size:12px;color:var(--success);">+3.1%</p>
+            <!-- NITADOL VISA CARD -->
+            <div class="nitadol-card">
+                <div class="card-top-row">
+                    <div class="card-chip-img"></div>
+                    <div class="card-brand">VISA PLATINUM</div>
                 </div>
-                <div style="background:rgba(179,147,89,0.08);border:1px solid rgba(179,147,89,0.2);border-radius:14px;padding:14px 18px;min-width:140px;flex-shrink:0;text-align:center;">
-                    <p style="font-size:11px;color:var(--text-gray);">ETH</p>
-                    <p style="font-size:20px;font-weight:800;color:var(--success);">$4,812</p>
-                    <p style="font-size:12px;color:var(--success);">+2.4%</p>
-                </div>
-                <div style="background:rgba(179,147,89,0.08);border:1px solid rgba(179,147,89,0.2);border-radius:14px;padding:14px 18px;min-width:140px;flex-shrink:0;text-align:center;">
-                    <p style="font-size:11px;color:var(--text-gray);">GOLD</p>
-                    <p style="font-size:20px;font-weight:800;color:var(--gold);">$2,442</p>
-                    <p style="font-size:12px;color:var(--gold);">+1.2%</p>
-                </div>
-                <div style="background:rgba(179,147,89,0.08);border:1px solid rgba(179,147,89,0.2);border-radius:14px;padding:14px 18px;min-width:140px;flex-shrink:0;text-align:center;">
-                    <p style="font-size:11px;color:var(--text-gray);">EUR/USD</p>
-                    <p style="font-size:20px;font-weight:800;color:#facc15;">1.0821</p>
-                    <p style="font-size:12px;color:#facc15;">-0.05%</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- FINANCE TAB -->
-    <div class="dash-tab" id="tab-finance">
-        <div class="finance-tab-content">
-            <h2 style="color:var(--gold);font-size:22px;margin-bottom:20px;">Finance Overview</h2>
-            <div class="finance-stat-grid">
-                <div class="finance-stat"><p>Digital Assets</p><h3 style="color:var(--success);">€248,750</h3><div class="trend" style="color:var(--success);">▲ +4.2%</div></div>
-                <div class="finance-stat"><p>Physical Bullion</p><h3 style="color:var(--gold);">€142,300</h3><div class="trend" style="color:var(--gold);">Stable • Vaulted</div></div>
-                <div class="finance-stat"><p>Liquidity Available</p><h3 style="color:#00ff88;">€87,000</h3><div class="trend" style="color:#00ff88;">Instant Access</div></div>
-                <div class="finance-stat"><p>Portfolio Growth</p><h3 style="color:var(--gold);">+11.7%</h3><div class="trend" style="color:var(--success);">This Quarter</div></div>
-            </div>
-            <!-- Asset Allocation -->
-            <div class="me-section">
-                <div class="me-section-title">Asset Allocation</div>
-                <div style="margin-bottom:12px;">
-                    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--text-gray);">Bitcoin</span><span style="color:var(--gold);">38%</span></div>
-                    <div style="background:rgba(255,255,255,0.08);border-radius:20px;height:8px;"><div style="width:38%;background:var(--gold);height:8px;border-radius:20px;"></div></div>
-                </div>
-                <div style="margin-bottom:12px;">
-                    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--text-gray);">Gold Bullion</span><span style="color:var(--gold);">29%</span></div>
-                    <div style="background:rgba(255,255,255,0.08);border-radius:20px;height:8px;"><div style="width:29%;background:#d4af37;height:8px;border-radius:20px;"></div></div>
-                </div>
-                <div style="margin-bottom:12px;">
-                    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--text-gray);">Ethereum</span><span style="color:var(--success);">18%</span></div>
-                    <div style="background:rgba(255,255,255,0.08);border-radius:20px;height:8px;"><div style="width:18%;background:var(--success);height:8px;border-radius:20px;"></div></div>
-                </div>
-                <div>
-                    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--text-gray);">Cash & Stablecoins</span><span style="color:#60a5fa;">15%</span></div>
-                    <div style="background:rgba(255,255,255,0.08);border-radius:20px;height:8px;"><div style="width:15%;background:#60a5fa;height:8px;border-radius:20px;"></div></div>
-                </div>
-            </div>
-            <!-- Loan Request -->
-            <div class="me-section">
-                <div class="me-section-title">Lending & Credit</div>
-                <div class="me-action-row" onclick="toggleModal('loanMod')">
-                    <div class="me-action-left">
-                        <div class="me-action-icon">🏦</div>
-                        <div class="me-action-text"><p>Request a Loan</p><span>Instant liquidity against assets</span></div>
+                <div class="card-number-display">4482 •••• •••• 9921</div>
+                <div class="card-footer-row">
+                    <div>
+                        <div style="font-size:9px; color:rgba(255,255,255,0.6); margin-bottom:2px;">CARD HOLDER</div>
+                        <div class="card-holder-name" id="cardHolderName2">—</div>
                     </div>
-                    <div class="me-chevron">›</div>
-                </div>
-                <div class="me-action-row" onclick="showLockedMsg()">
-                    <div class="me-action-left">
-                        <div class="me-action-icon">📊</div>
-                        <div class="me-action-text"><p>Credit Score Report</p><span>View your institutional rating</span></div>
+                    <div>
+                        <div style="font-size:9px; color:rgba(255,255,255,0.6); margin-bottom:2px;">EXPIRES</div>
+                        <div class="card-expiry">12/28</div>
                     </div>
-                    <div class="me-chevron">›</div>
+                    <div>
+                        <div style="font-size:9px; color:rgba(255,255,255,0.6); margin-bottom:2px;">CVV</div>
+                        <div class="card-expiry">•••</div>
+                    </div>
                 </div>
             </div>
-            <!-- Dynamic Token -->
-            <div class="me-section">
-                <div class="me-section-title">Dynamic Access Token</div>
+
+            <!-- ACCESS TOKEN -->
+            <div class="stat-item glass-effect" style="margin-bottom:20px;">
+                <p style="font-size:12px; color:var(--text-gray); margin-bottom:8px;">DYNAMIC ACCESS TOKEN</p>
                 <div class="token-box">
                     <div class="token-val" id="tokenDisplay">000000</div>
                 </div>
-                <div class="progress-bar" id="tokenProgress" style="margin-top:10px;"></div>
-                <p style="font-size:10px;margin-top:10px;color:var(--success);text-align:center;">AUTO-REFRESH ACTIVE</p>
+                <div class="progress-bar" id="tokenProgress"></div>
+                <p style="font-size:10px; margin-top:10px; color:var(--success);">AUTO-REFRESH ACTIVE</p>
+            </div>
+
+            <!-- CARD DETAILS -->
+            <div class="card-details-section">
+                <div class="card-detail-row">
+                    <div class="card-detail-label">Card Number</div>
+                    <div class="card-detail-val">4482 •••• •••• 9921</div>
+                </div>
+                <div class="card-detail-row">
+                    <div class="card-detail-label">Card Type</div>
+                    <div class="card-detail-val">Visa Platinum</div>
+                </div>
+                <div class="card-detail-row">
+                    <div class="card-detail-label">Expiry Date</div>
+                    <div class="card-detail-val">12/28</div>
+                </div>
+                <div class="card-detail-row">
+                    <div class="card-detail-label">Card Status</div>
+                    <div class="card-detail-val" style="color:var(--success);">Active</div>
+                </div>
+                <div class="card-detail-row">
+                    <div class="card-detail-label">Tier</div>
+                    <div class="card-detail-val" style="color:var(--gold);">Gold Tier</div>
+                </div>
+                <div class="card-detail-row">
+                    <div class="card-detail-label">Daily Limit</div>
+                    <div class="card-detail-val">€25,000</div>
+                </div>
+            </div>
+
+            <button class="primary-btn" style="margin-top:20px;" onclick="showLocked('Card Freeze / Block')">
+                <i class="fas fa-lock" style="margin-right:8px;"></i>Freeze Card
+            </button>
+        </div>
+    </div>
+
+    <!-- ME PAGE -->
+    <div id="me-page" class="dash-page">
+        <div class="me-page-content">
+            <!-- PROFILE HEADER -->
+            <div class="me-header">
+                <img id="meAvatar" class="me-avatar" src="https://i.pinimg.com/1200x/e4/ba/cd/e4bacd619803941c5488a4d2d6b9f986.jpg" alt="Profile">
+                <div class="me-name" id="meName">—</div>
+                <div class="me-email" id="meEmail">—</div>
+                <div class="me-tier">GOLD TIER CLIENT</div>
+            </div>
+
+            <!-- PERSONAL INFO -->
+            <div class="me-section">
+                <div class="me-section-title"><i class="fas fa-user" style="margin-right:6px;"></i>Personal Information</div>
+                <div class="me-row">
+                    <div class="me-row-left">
+                        <div class="me-row-icon"><i class="fas fa-user"></i></div>
+                        <div><div class="me-row-label">Full Name</div><div class="me-row-sub" id="meFullName">—</div></div>
+                    </div>
+                </div>
+                <div class="me-row">
+                    <div class="me-row-left">
+                        <div class="me-row-icon"><i class="fas fa-phone"></i></div>
+                        <div><div class="me-row-label">Phone</div><div class="me-row-sub" id="mePhone">—</div></div>
+                    </div>
+                </div>
+                <div class="me-row">
+                    <div class="me-row-left">
+                        <div class="me-row-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div><div class="me-row-label">Address</div><div class="me-row-sub" id="meAddress">—</div></div>
+                    </div>
+                </div>
+                <div class="me-row">
+                    <div class="me-row-left">
+                        <div class="me-row-icon"><i class="fas fa-globe"></i></div>
+                        <div><div class="me-row-label">Country</div><div class="me-row-sub" id="meCountry">—</div></div>
+                    </div>
+                </div>
+                <div class="me-row">
+                    <div class="me-row-left">
+                        <div class="me-row-icon"><i class="fas fa-venus-mars"></i></div>
+                        <div><div class="me-row-label">Gender</div><div class="me-row-sub" id="meGender">—</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCOUNT DETAILS -->
+            <div class="me-section">
+                <div class="me-section-title"><i class="fas fa-university" style="margin-right:6px;"></i>Bank Account Details</div>
+                <div style="padding:16px;">
+                    <div class="account-detail-box">
+                        <h4><i class="fas fa-flag" style="margin-right:6px;"></i>Local Transfer Details</h4>
+                        <div class="acc-field"><span class="acc-field-label">Account Number</span><span class="acc-field-val" id="meAccNum">—</span></div>
+                        <div class="acc-field"><span class="acc-field-label">Bank Name</span><span class="acc-field-val" id="meBankName">Nitadol Private Bank</span></div>
+                        <div class="acc-field"><span class="acc-field-label">Sort Code / Branch</span><span class="acc-field-val" id="meSortCode">—</span></div>
+                        <div class="acc-field"><span class="acc-field-label">Account Name</span><span class="acc-field-val" id="meAccName">—</span></div>
+                    </div>
+                    <div class="account-detail-box">
+                        <h4><i class="fas fa-globe-europe" style="margin-right:6px;"></i>International / SEPA Transfer</h4>
+                        <div class="acc-field"><span class="acc-field-label">IBAN</span><span class="acc-field-val" id="meIBAN">—</span></div>
+                        <div class="acc-field"><span class="acc-field-label">SWIFT / BIC</span><span class="acc-field-val">NTADCHZZ</span></div>
+                        <div class="acc-field"><span class="acc-field-label">Bank Address</span><span class="acc-field-val">Bahnhofstrasse 1, Zurich, CH</span></div>
+                        <div class="acc-field"><span class="acc-field-label">Currency</span><span class="acc-field-val">EUR / CHF / USD</span></div>
+                    </div>
+                    <div class="account-detail-box">
+                        <h4><i class="fas fa-id-card" style="margin-right:6px;"></i>Account Identifiers</h4>
+                        <div class="acc-field"><span class="acc-field-label">Nitadol ID</span><span class="acc-field-val" id="meNitadolID">—</span></div>
+                        <div class="acc-field"><span class="acc-field-label">Account Tier</span><span class="acc-field-val" style="color:var(--gold);">GOLD</span></div>
+                        <div class="acc-field"><span class="acc-field-label">KYC Status</span><span class="acc-field-val" style="color:var(--success);">Verified</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS -->
+            <div class="me-section">
+                <div class="me-section-title"><i class="fas fa-cog" style="margin-right:6px;"></i>Settings & Security</div>
+                <div class="me-row" onclick="showLocked('Change Password')">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-key"></i></div><div><div class="me-row-label">Change Password</div><div class="me-row-sub">Update your vault password</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="me-row" onclick="showLocked('Change PIN')">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-lock"></i></div><div><div class="me-row-label">Change PIN</div><div class="me-row-sub">Update your vault PIN</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="me-row" onclick="showLocked('Biometric Login')">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-fingerprint"></i></div><div><div class="me-row-label">Biometric Login</div><div class="me-row-sub">Fingerprint / Face ID</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="me-row" onclick="resendVerification()">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-envelope"></i></div><div><div class="me-row-label">Verify Email</div><div class="me-row-sub">Resend verification link</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+
+            <!-- RATE US -->
+            <div class="me-section">
+                <div class="me-section-title"><i class="fas fa-star" style="margin-right:6px;"></i>Rate Us</div>
+                <div style="padding:20px; text-align:center;">
+                    <p style="font-size:13px; color:var(--text-gray); margin-bottom:16px;">How was your experience with Nitadol Bank?</p>
+                    <div class="star-rating" id="starRating">
+                        <button class="star-btn" onclick="rateStar(1)"><i class="fas fa-star"></i></button>
+                        <button class="star-btn" onclick="rateStar(2)"><i class="fas fa-star"></i></button>
+                        <button class="star-btn" onclick="rateStar(3)"><i class="fas fa-star"></i></button>
+                        <button class="star-btn" onclick="rateStar(4)"><i class="fas fa-star"></i></button>
+                        <button class="star-btn" onclick="rateStar(5)"><i class="fas fa-star"></i></button>
+                    </div>
+                    <textarea id="rateComment" placeholder="Leave a comment (optional)..." style="width:100%; padding:12px; background:#0f172a; border:1px solid rgba(179,147,89,0.3); border-radius:12px; color:#fff; font-size:13px; resize:none; height:80px; outline:none; margin-top:10px;"></textarea>
+                    <button class="primary-btn" style="margin-top:10px;" onclick="submitRating()">Submit Review</button>
+                </div>
+            </div>
+
+            <!-- CONTACT US -->
+            <div class="me-section">
+                <div class="me-section-title"><i class="fas fa-headset" style="margin-right:6px;"></i>Contact & Support</div>
+                <div class="me-row" onclick="window.open('mailto:nitadolb@gmail.com')">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-envelope"></i></div><div><div class="me-row-label">Email Support</div><div class="me-row-sub">nitadolb@gmail.com</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-external-link-alt"></i></div>
+                </div>
+                <div class="me-row" onclick="toggleModal('helpMod')">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-comments"></i></div><div><div class="me-row-label">Live Chat</div><div class="me-row-sub">24/7 priority concierge</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="me-row">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-question-circle"></i></div><div><div class="me-row-label">FAQ</div><div class="me-row-sub">Common questions answered</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+
+            <!-- LOGOUT -->
+            <button class="primary-btn" style="background:rgba(255,75,75,0.15); color:#ff4b4b; border:1px solid #ff4b4b; margin-top:8px;" onclick="signOutUser()">
+                <i class="fas fa-sign-out-alt" style="margin-right:8px;"></i> Sign Out
+            </button>
+            <div style="height:20px;"></div>
+        </div>
+    </div>
+
+    <!-- FINANCE PAGE -->
+    <div id="finance-page" class="dash-page">
+        <div class="page-header-bar">
+            <div class="page-header-title">Finance</div>
+        </div>
+        <div style="padding:0 16px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+                <div class="finance-stat-box">
+                    <div class="finance-stat-label">Digital Assets</div>
+                    <div class="finance-stat-val">€248,750</div>
+                    <div class="finance-stat-change" style="color:var(--success);">▲ +4.2% this month</div>
+                </div>
+                <div class="finance-stat-box">
+                    <div class="finance-stat-label">Physical Bullion</div>
+                    <div class="finance-stat-val" style="color:#e5c07b;">€142,300</div>
+                    <div class="finance-stat-change" style="color:var(--gold);">Stable • Vaulted</div>
+                </div>
+                <div class="finance-stat-box">
+                    <div class="finance-stat-label">Liquidity Available</div>
+                    <div class="finance-stat-val" style="color:var(--success);">€87,000</div>
+                    <div class="finance-stat-change" style="color:var(--success);">Instant access</div>
+                </div>
+                <div class="finance-stat-box">
+                    <div class="finance-stat-label">Portfolio Growth</div>
+                    <div class="finance-stat-val">+11.7%</div>
+                    <div class="finance-stat-change" style="color:var(--success);">This quarter</div>
+                </div>
+            </div>
+
+            <!-- Investment Options -->
+            <div class="section-title" style="margin-bottom:14px;"><i class="fas fa-chart-pie"></i> Investments</div>
+            <div class="me-section" style="margin-bottom:16px;">
+                <div class="me-row" onclick="showLocked('Private Equity Portfolio')">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-building"></i></div><div><div class="me-row-label">Private Equity</div><div class="me-row-sub">18.4% YTD returns</div></div></div>
+                    <div class="me-row-right" style="color:var(--success);">+18.4% <i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="me-row" onclick="showLocked('Real Estate Tokenization')">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-home"></i></div><div><div class="me-row-label">Real Estate Tokens</div><div class="me-row-sub">€14.2M portfolio value</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="me-row" onclick="showLocked('Gold-Backed Stablecoins')">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-coins"></i></div><div><div class="me-row-label">Gold Stablecoins</div><div class="me-row-sub">+2.9% yield</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="me-row" onclick="showLocked('Legacy Planning & Swiss Trust')">
+                    <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-landmark"></i></div><div><div class="me-row-label">Legacy Planning</div><div class="me-row-sub">Swiss trust structuring</div></div></div>
+                    <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- CARD TAB -->
-    <div class="dash-tab" id="tab-card">
-        <div class="card-tab-content">
-            <h2 style="color:var(--gold);font-size:22px;margin-bottom:20px;">My Cards</h2>
-            <div class="card-display">
-                <div class="card-row">
-                    <div class="card-chip"></div>
-                    <span style="color:var(--gold);font-style:italic;font-weight:900;font-size:16px;">VISA PLATINUM</span>
-                </div>
-                <div class="card-number-full" id="cardNumberDisplay">4482 •••• •••• 9921</div>
-                <div class="card-footer-row">
-                    <div>
-                        <div class="card-info-label">Card Holder</div>
-                        <div class="card-info-val" id="cardHolderName">Loading...</div>
-                    </div>
-                    <div>
-                        <div class="card-info-label">Expiry</div>
-                        <div class="card-info-val">12/28</div>
-                    </div>
-                    <div>
-                        <div class="card-info-label">CVV</div>
-                        <div class="card-info-val">•••</div>
-                    </div>
-                </div>
+    <!-- REWARD PAGE -->
+    <div id="reward-page" class="dash-page">
+        <div class="page-header-bar">
+            <div class="page-header-title">Rewards</div>
+        </div>
+        <div style="padding:0 16px;">
+            <div class="reward-banner">
+                <div style="font-size:36px; margin-bottom:8px;">🏆</div>
+                <div class="reward-pts" id="rewardPoints">2,450</div>
+                <div class="reward-pts-label">Nitadol Gold Points</div>
             </div>
-            <!-- Card Actions -->
-            <div class="card-actions-grid">
-                <div class="card-action" onclick="showLockedMsg()"><span>🔒</span><p>Freeze Card</p></div>
-                <div class="card-action" onclick="showLockedMsg()"><span>💳</span><p>Virtual Card</p></div>
-                <div class="card-action" onclick="showLockedMsg()"><span>📍</span><p>Card Limits</p></div>
-                <div class="card-action" onclick="showLockedMsg()"><span>🔁</span><p>Replace Card</p></div>
+
+            <div class="section-title" style="margin-bottom:14px;"><i class="fas fa-gift"></i> Earn More Points</div>
+            <div class="reward-item">
+                <div class="reward-item-icon"><i class="fas fa-paper-plane"></i></div>
+                <div><h4>Make a Transfer</h4><p>Earn 50 pts per €100 transferred</p></div>
+                <div class="reward-pts-small">50 pts</div>
             </div>
-            <!-- Card Info -->
-            <div class="me-section" style="margin-top:16px;">
-                <div class="me-section-title">Card Details</div>
-                <div class="me-info-row"><span class="me-info-key">Card Type</span><span class="me-info-val" style="color:var(--gold);">Visa Platinum</span></div>
-                <div class="me-info-row"><span class="me-info-key">Status</span><span class="me-info-val" style="color:var(--success);">● Active</span></div>
-                <div class="me-info-row"><span class="me-info-key">Network</span><span class="me-info-val">VISA International</span></div>
-                <div class="me-info-row"><span class="me-info-key">Monthly Limit</span><span class="me-info-val">€50,000</span></div>
+            <div class="reward-item">
+                <div class="reward-item-icon"><i class="fas fa-user-plus"></i></div>
+                <div><h4>Refer a Friend</h4><p>Earn 500 pts per referral</p></div>
+                <div class="reward-pts-small">500 pts</div>
             </div>
+            <div class="reward-item">
+                <div class="reward-item-icon"><i class="fas fa-shopping-bag"></i></div>
+                <div><h4>Shop with Card</h4><p>Earn 2% back as points</p></div>
+                <div class="reward-pts-small">2%</div>
+            </div>
+            <div class="reward-item">
+                <div class="reward-item-icon"><i class="fas fa-check-circle"></i></div>
+                <div><h4>Complete Verification</h4><p>One-time bonus points</p></div>
+                <div class="reward-pts-small">1000 pts</div>
+            </div>
+
+            <div class="section-title" style="margin-top:20px; margin-bottom:14px;"><i class="fas fa-star"></i> Redeem Points</div>
+            <div class="savings-banner" onclick="showLocked('Redeem Points for Cashback')">
+                <div class="savings-icon"><i class="fas fa-exchange-alt" style="color:#fff;"></i></div>
+                <div class="savings-text"><h4>Redeem for Cashback</h4><p>1000 pts = €5.00 credit</p></div>
+                <div class="savings-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div style="height:10px;"></div>
         </div>
     </div>
 
-    <!-- ME TAB -->
-    <div class="dash-tab" id="tab-me">
-        <div class="me-tab-content">
-            <!-- Profile Header -->
-            <div class="me-profile-header">
-                <img id="meAvatar" class="me-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
-                <div class="me-name" id="meName">Loading...</div>
-                <div style="font-size:13px;color:var(--text-gray);margin:4px 0 10px;" id="meEmail">...</div>
-                <span class="me-tier">GOLD TIER • VERIFIED</span>
-            </div>
-
-            <!-- Personal Info -->
-            <div class="me-section">
-                <div class="me-section-title">Personal Information</div>
-                <div class="me-info-row"><span class="me-info-key">Full Name</span><span class="me-info-val" id="meFullName">—</span></div>
-                <div class="me-info-row"><span class="me-info-key">Email</span><span class="me-info-val" id="meEmailVal">—</span></div>
-                <div class="me-info-row"><span class="me-info-key">Phone</span><span class="me-info-val" id="mePhone">—</span></div>
-                <div class="me-info-row"><span class="me-info-key">Country</span><span class="me-info-val" id="meCountry">—</span></div>
-                <div class="me-info-row"><span class="me-info-key">Address</span><span class="me-info-val" id="meAddress">—</span></div>
-                <div class="me-info-row"><span class="me-info-key">Status</span><span class="me-info-val" style="color:var(--success);">● GOLD TIER</span></div>
-            </div>
-
-            <!-- Account Details (IBAN, etc.) -->
-            <div class="me-section">
-                <div class="me-section-title">Account & Banking Details</div>
-                <div class="me-info-row">
-                    <span class="me-info-key">Account ID</span>
-                    <div class="acct-detail-copy">
-                        <span class="me-info-val" id="meAcctID">—</span>
-                        <button class="copy-btn" onclick="copyToClipboard('meAcctID')">COPY</button>
-                    </div>
-                </div>
-                <div class="me-info-row">
-                    <span class="me-info-key">IBAN</span>
-                    <div class="acct-detail-copy">
-                        <span class="me-info-val" id="meIBAN" style="font-family:'JetBrains Mono',monospace;font-size:11px;">—</span>
-                        <button class="copy-btn" onclick="copyToClipboard('meIBAN')">COPY</button>
-                    </div>
-                </div>
-                <div class="me-info-row">
-                    <span class="me-info-key">BIC / SWIFT</span>
-                    <div class="acct-detail-copy">
-                        <span class="me-info-val" id="meSWIFT" style="font-family:'JetBrains Mono',monospace;">NTDLCH22</span>
-                        <button class="copy-btn" onclick="copyToClipboard('meSWIFT')">COPY</button>
-                    </div>
-                </div>
-                <div class="me-info-row"><span class="me-info-key">Bank Name</span><span class="me-info-val">Nitadol Private Bank</span></div>
-                <div class="me-info-row"><span class="me-info-key">Bank Address</span><span class="me-info-val">Bahnhofstrasse 45, Zürich 8001, Switzerland</span></div>
-                <div class="me-info-row"><span class="me-info-key">Sort Code</span><span class="me-info-val" id="meSortCode">—</span></div>
-                <div class="me-info-row"><span class="me-info-key">Account Number</span><span class="me-info-val" id="meAcctNum" style="font-family:'JetBrains Mono',monospace;">—</span></div>
-                <div class="me-info-row"><span class="me-info-key">Routing Number</span><span class="me-info-val" id="meRouting">—</span></div>
-            </div>
-
-            <!-- Settings & Actions -->
-            <div class="me-section">
-                <div class="me-section-title">Account Actions</div>
-                <div class="me-action-row" onclick="toggleModal('helpMod')">
-                    <div class="me-action-left"><div class="me-action-icon">📩</div><div class="me-action-text"><p>Help & Support</p><span>24/7 Concierge team</span></div></div>
-                    <div class="me-chevron">›</div>
-                </div>
-                <div class="me-action-row" onclick="showLockedMsg()">
-                    <div class="me-action-left"><div class="me-action-icon">🔐</div><div class="me-action-text"><p>Security Settings</p><span>PIN, biometrics, 2FA</span></div></div>
-                    <div class="me-chevron">›</div>
-                </div>
-                <div class="me-action-row" onclick="showLockedMsg()">
-                    <div class="me-action-left"><div class="me-action-icon">🌍</div><div class="me-action-text"><p>Upgrade to Global Tier</p><span>Unlock all services</span></div></div>
-                    <div class="me-chevron">›</div>
-                </div>
-                <div class="me-action-row" onclick="resendVerification()">
-                    <div class="me-action-left"><div class="me-action-icon">📧</div><div class="me-action-text"><p>Resend Verification</p><span>Activate your vault</span></div></div>
-                    <div class="me-chevron">›</div>
-                </div>
-                <div class="me-action-row" onclick="signOutUser()">
-                    <div class="me-action-left"><div class="me-action-icon">🚪</div><div class="me-action-text"><p style="color:#ff4b4b;">Sign Out</p><span>Log out of your account</span></div></div>
-                    <div class="me-chevron" style="color:#ff4b4b;">›</div>
-                </div>
-            </div>
-
-            <!-- Rate Us -->
-            <div class="me-section">
-                <div class="me-section-title">Rate Nitadol Bank</div>
-                <p style="font-size:13px;color:var(--text-gray);margin-bottom:12px;">How would you rate your banking experience?</p>
-                <div class="star-rating" id="starRating">
-                    <span class="star" onclick="rateStar(1)">★</span>
-                    <span class="star" onclick="rateStar(2)">★</span>
-                    <span class="star" onclick="rateStar(3)">★</span>
-                    <span class="star" onclick="rateStar(4)">★</span>
-                    <span class="star" onclick="rateStar(5)">★</span>
-                </div>
-                <textarea id="ratingComment" placeholder="Leave a comment (optional)..." style="width:100%;padding:12px;background:var(--card-bg);border:1px solid var(--gold-glow);border-radius:10px;color:var(--white);outline:none;resize:none;height:80px;font-size:13px;margin:10px 0;"></textarea>
-                <button class="primary-btn" style="margin-top:6px;" onclick="submitRating()">Submit Review</button>
-            </div>
-
-            <!-- Contact Us -->
-            <div class="me-section">
-                <div class="me-section-title">Contact Us</div>
-                <div class="me-info-row"><span class="me-info-key">Email</span><span class="me-info-val" style="color:var(--gold);">nitadolb@gmail.com</span></div>
-                <div class="me-info-row"><span class="me-info-key">Available</span><span class="me-info-val">24/7 Global</span></div>
-                <div class="me-info-row"><span class="me-info-key">Head Office</span><span class="me-info-val">Zürich, Switzerland</span></div>
-                <button class="primary-btn" style="margin-top:16px;" onclick="toggleModal('helpMod')">Open Support Ticket</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- REWARD TAB -->
-    <div class="dash-tab" id="tab-reward">
-        <div class="reward-tab-content">
-            <div class="reward-hero">
-                <h2>Your Rewards</h2>
-                <p>Points earned from every transaction</p>
-                <div class="reward-points" id="rewardPoints">1,240</div>
-                <p style="color:rgba(0,0,0,0.7);font-size:13px;">≈ €124.00 redeemable value</p>
-            </div>
-            <div class="reward-grid">
-                <div class="reward-item" onclick="showLockedMsg()"><span>🏆</span><p>Redeem Points</p></div>
-                <div class="reward-item" onclick="showLockedMsg()"><span>🎁</span><p>Gift Cards</p></div>
-                <div class="reward-item" onclick="showLockedMsg()"><span>✈️</span><p>Travel Miles</p></div>
-                <div class="reward-item" onclick="showLockedMsg()"><span>💎</span><p>VIP Upgrade</p></div>
-            </div>
-            <div class="me-section" style="margin-top:16px;">
-                <div class="me-section-title">Reward History</div>
-                <div class="me-info-row"><span class="me-info-key">Account Opening</span><span class="me-info-val" style="color:var(--success);">+500 pts</span></div>
-                <div class="me-info-row"><span class="me-info-key">Profile Verified</span><span class="me-info-val" style="color:var(--success);">+250 pts</span></div>
-                <div class="me-info-row"><span class="me-info-key">First Deposit</span><span class="me-info-val" style="color:var(--success);">+490 pts</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- BOTTOM NAV -->
+    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
-        <div class="nav-btn active" id="nav-home" onclick="switchTab('home')">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-label">Home</span>
-        </div>
-        <div class="nav-btn" id="nav-finance" onclick="switchTab('finance')">
-            <span class="nav-icon">📈</span>
-            <span class="nav-label">Finance</span>
-        </div>
-        <div class="nav-btn" id="nav-reward" onclick="switchTab('reward')">
-            <span class="nav-icon">🎁</span>
-            <span class="nav-label">Rewards</span>
-        </div>
-        <div class="nav-btn" id="nav-card" onclick="switchTab('card')">
-            <span class="nav-icon">💳</span>
-            <span class="nav-label">Card</span>
-        </div>
-        <div class="nav-btn" id="nav-me" onclick="switchTab('me')">
-            <span class="nav-icon">👤</span>
-            <span class="nav-label">Me</span>
+        <button class="nav-tab active" onclick="switchTab('home')" id="tab-home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-tab" onclick="switchTab('finance')" id="tab-finance">
+            <i class="fas fa-chart-line"></i>
+            <span>Finance</span>
+        </button>
+        <button class="nav-tab" onclick="switchTab('reward')" id="tab-reward">
+            <i class="fas fa-gift"></i>
+            <span>Rewards</span>
+        </button>
+        <button class="nav-tab" onclick="switchTab('card')" id="tab-card">
+            <i class="fas fa-credit-card"></i>
+            <span>Card</span>
+        </button>
+        <button class="nav-tab" onclick="switchTab('me')" id="tab-me">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </button>
+    </div>
+</div>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notif-panel" id="notifPanel">
+    <div class="notif-panel-header">
+        <div class="notif-panel-title">Notifications</div>
+        <button class="notif-close" onclick="closeNotifPanel()"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="notifList">
+        <div class="notif-empty">
+            <i class="fas fa-bell-slash"></i>
+            <p>No notifications yet</p>
         </div>
     </div>
 </div>
 
-<!-- ======= MODALS ======= -->
+<!-- MODALS (all existing + new) -->
 <div class="modal" id="helpMod">
     <div class="modal-content glass-effect">
         <h2 style="color:var(--gold);">Client Support</h2>
-        <p style="margin:15px 0;font-size:14px;color:var(--text-gray);">For technical issues, vault recovery, or account upgrades, please contact our 24/7 priority line.</p>
-        <div style="background:var(--card-bg);padding:20px;border-radius:10px;border-left:3px solid var(--gold);">
-            <p style="font-size:12px;">Official Agent Email:</p>
-            <h3 style="color:var(--white);margin-top:5px;">nitadolb@gmail.com</h3>
+        <p style="margin: 15px 0; font-size: 14px; color: var(--text-gray);">For technical issues, vault recovery, or account upgrades, please contact our 24/7 priority line.</p>
+        <div style="background: var(--card-bg); padding: 20px; border-radius: 10px; border-left: 3px solid var(--gold);">
+            <p style="font-size: 12px;">Official Agent Email:</p>
+            <h3 style="color: var(--white); margin-top: 5px;">nitadolb@gmail.com</h3>
         </div>
-        <button class="primary-btn" style="margin-top:20px;" onclick="toggleModal('helpMod')">Close</button>
+        <button class="primary-btn" style="margin-top: 20px;" onclick="toggleModal('helpMod')">Close</button>
     </div>
 </div>
 
@@ -1050,49 +1513,49 @@
     <div class="modal-content glass-effect">
         <div id="loanInputs">
             <h2>Lending Portfolio</h2>
-            <p style="font-size:12px;margin-bottom:15px;color:var(--text-gray);">Apply for instant liquidity against assets.</p>
+            <p style="font-size: 12px; margin-bottom: 15px; color: var(--text-gray);">Apply for instant liquidity against assets.</p>
             <input type="number" id="lAmount" placeholder="Loan Amount Required (€)">
             <select id="lReason"><option value="">Select Purpose</option><option value="business">Business Expansion</option><option value="crypto">Asset Acquisition</option><option value="realestate">Real Estate</option></select>
             <input type="text" placeholder="Collateral Type (e.g. BTC, Gold)">
             <button class="primary-btn" onclick="applyLoan()">Submit Application</button>
         </div>
-        <div id="loanStatus" style="display:none;text-align:center;">
-            <div class="spinner"></div>
+        <div id="loanStatus" style="display:none; text-align:center;">
+            <div class="spinner-old"></div>
             <p id="loanMsg">Evaluating Credit Portfolio...</p>
         </div>
-        <p onclick="toggleModal('loanMod')" style="text-align:center;margin-top:15px;font-size:12px;cursor:pointer;">Close</p>
+        <p onclick="toggleModal('loanMod')" style="text-align:center; margin-top:15px; font-size:12px; cursor:pointer;">Close</p>
     </div>
 </div>
 
 <div class="modal" id="regMod">
     <div class="modal-content glass-effect">
         <div id="step1" class="reg-step active">
-            <h2 style="margin-bottom:20px;">Vault Application <span style="font-size:12px;color:var(--gold);">(1/2)</span></h2>
+            <h2 style="margin-bottom:20px;">Vault Application <span style="font-size:12px; color:var(--gold);">(1/2)</span></h2>
             <input type="text" id="rName" placeholder="Full Name">
             <input type="email" id="rEmail" placeholder="Email Address">
             <input type="password" id="rPass" placeholder="Secure Password">
             <button class="primary-btn" onclick="nextStep(2)">Continue</button>
         </div>
         <div id="step2" class="reg-step">
-            <h2 style="margin-bottom:20px;">Security Profile <span style="font-size:12px;color:var(--gold);">(2/2)</span></h2>
+            <h2 style="margin-bottom:20px;">Security Profile <span style="font-size:12px; color:var(--gold);">(2/2)</span></h2>
             <input type="text" id="rCountry" placeholder="Country of Residence">
             <input type="text" id="rAddress" placeholder="Physical Address">
             <input type="tel" id="rPhone" placeholder="Mobile Number">
             <input type="password" id="rPin" placeholder="Create 4-Digit Vault PIN" maxlength="4">
-            <div style="margin:20px 0 15px;">
-                <label style="display:block;color:var(--gold);font-size:13px;margin-bottom:8px;">Gender</label>
-                <div style="display:flex;gap:25px;align-items:center;">
-                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;"><input type="radio" name="gender" value="Male" id="rGenderMale" checked><span>Male</span></label>
-                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;"><input type="radio" name="gender" value="Female" id="rGenderFemale"><span>Female</span></label>
-                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;"><input type="radio" name="gender" value="Other" id="rGenderOther"><span>Other</span></label>
+            <div style="margin: 20px 0 15px;">
+                <label style="display:block; color:var(--gold); font-size:13px; margin-bottom:8px;">Gender</label>
+                <div style="display:flex; gap:25px; align-items:center;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:500;"><input type="radio" name="gender" value="Male" id="rGenderMale" checked><span>Male</span></label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:500;"><input type="radio" name="gender" value="Female" id="rGenderFemale"><span>Female</span></label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:500;"><input type="radio" name="gender" value="Other" id="rGenderOther"><span>Other</span></label>
                 </div>
             </div>
-            <div style="display:flex;gap:10px;">
-                <button class="primary-btn" style="background:#334155;color:white;" onclick="nextStep(1)">Back</button>
+            <div style="display:flex; gap:10px;">
+                <button class="primary-btn" style="background:#334155; color:white;" onclick="nextStep(1)">Back</button>
                 <button class="primary-btn" onclick="registerUser()">Complete</button>
             </div>
         </div>
-        <p onclick="toggleModal('regMod')" style="text-align:center;margin-top:15px;font-size:12px;cursor:pointer;">Cancel</p>
+        <p onclick="toggleModal('regMod')" style="text-align:center; margin-top:15px; font-size:12px; cursor:pointer;">Cancel</p>
     </div>
 </div>
 
@@ -1102,7 +1565,7 @@
         <input type="email" id="lEmail" placeholder="Email">
         <input type="password" id="lPass" placeholder="Password">
         <button class="primary-btn" onclick="loginUser()">Access</button>
-        <p onclick="toggleModal('loginMod')" style="text-align:center;margin-top:15px;font-size:12px;cursor:pointer;">Close</p>
+        <p onclick="toggleModal('loginMod')" style="text-align:center; margin-top:15px; font-size:12px; cursor:pointer;">Close</p>
     </div>
 </div>
 
@@ -1116,73 +1579,129 @@
             <input type="password" placeholder="Vault PIN" maxlength="4">
             <button class="primary-btn" onclick="doTransfer()">Confirm Transfer</button>
         </div>
-        <div id="transStatus" style="display:none;text-align:center;">
-            <div class="spinner"></div>
+        <div id="transStatus" style="display:none; text-align:center;">
+            <div class="spinner-old"></div>
             <p id="statusMsg">Syncing with Global Ledger...</p>
         </div>
-        <p onclick="toggleModal('transMod')" style="text-align:center;margin-top:15px;font-size:12px;cursor:pointer;">Close</p>
+        <p onclick="toggleModal('transMod')" style="text-align:center; margin-top:15px; font-size:12px; cursor:pointer;">Close</p>
     </div>
 </div>
 
+<!-- ADD MONEY MODAL -->
+<div class="modal" id="addMoneyMod">
+    <div class="modal-content glass-effect">
+        <h2 style="color:var(--gold); margin-bottom:8px;">Add Money</h2>
+        <p style="font-size:13px; color:var(--text-gray); margin-bottom:20px;">Fund your Nitadol vault account</p>
+        <div style="background:var(--card-bg); border-radius:14px; overflow:hidden; margin-bottom:20px;">
+            <div class="me-row" onclick="showLocked('Bank Transfer to Vault')">
+                <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-university"></i></div><div><div class="me-row-label">Bank Transfer</div><div class="me-row-sub">Wire to your account IBAN</div></div></div>
+                <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="me-row" onclick="showLocked('Crypto Deposit')">
+                <div class="me-row-left"><div class="me-row-icon"><i class="fab fa-bitcoin"></i></div><div><div class="me-row-label">Crypto Deposit</div><div class="me-row-sub">BTC, ETH, USDT accepted</div></div></div>
+                <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="me-row" onclick="showLocked('Card Funding')">
+                <div class="me-row-left"><div class="me-row-icon"><i class="fas fa-credit-card"></i></div><div><div class="me-row-label">Card Funding</div><div class="me-row-sub">Visa / Mastercard</div></div></div>
+                <div class="me-row-right"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+        <button class="primary-btn" onclick="toggleModal('addMoneyMod')">Close</button>
+    </div>
+</div>
+
+<!-- LOCKED MODAL -->
+<div class="modal" id="lockedMod">
+    <div class="modal-content glass-effect">
+        <div class="locked-modal-inner">
+            <div class="locked-icon"><i class="fas fa-lock"></i></div>
+            <div class="locked-title" id="lockedTitle">Feature Locked</div>
+            <div class="locked-sub" id="lockedSub">This feature is not yet activated on your account. Please contact the bank to unlock full access.</div>
+            <div class="locked-contact">
+                <p>Contact Bank to Activate</p>
+                <h4>nitadolb@gmail.com</h4>
+            </div>
+            <button class="primary-btn" onclick="toggleModal('lockedMod')">Got It</button>
+        </div>
+    </div>
+</div>
+
+<!-- PORTFOLIO MODAL -->
 <div class="modal" id="portfolioMod">
     <div class="modal-content glass-effect" style="max-width:620px;">
         <h2 style="color:var(--gold);">Portfolio Insights</h2>
-        <p style="margin-bottom:25px;color:var(--text-gray);">Your liquid glass portfolio overview with real-time allocation and projected growth.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-            <div style="background:var(--card-bg);padding:20px;border-radius:14px;border-left:4px solid var(--gold);text-align:center;">
-                <p style="font-size:12px;color:var(--text-gray);">CURRENT</p>
-                <h3 style="font-size:18px;color:var(--gold);margin-top:6px;">62% Digital<br>38% Physical</h3>
-            </div>
-            <div style="background:var(--card-bg);padding:20px;border-radius:14px;border-left:4px solid var(--success);text-align:center;">
-                <p style="font-size:12px;color:var(--text-gray);">PROJECTED 12-MO</p>
-                <h3 style="font-size:28px;color:var(--success);margin-top:6px;">+14.8%</h3>
-            </div>
+        <p style="margin-bottom:25px; color:var(--text-gray);">Your liquid glass portfolio overview with real-time allocation and projected growth.</p>
+        <div class="stat-grid" style="grid-template-columns:1fr 1fr;">
+            <div class="stat-item" style="text-align:center;"><p style="font-size:13px;">CURRENT ALLOCATION</p><h1 style="font-size:28px; color:var(--gold);">62% Digital • 38% Physical</h1></div>
+            <div class="stat-item" style="text-align:center;"><p style="font-size:13px;">PROJECTED 12-MO</p><h1 style="font-size:42px; color:var(--success);">+14.8%</h1></div>
         </div>
-        <button class="primary-btn" onclick="toggleModal('portfolioMod')" style="margin-top:24px;">Close</button>
+        <button class="primary-btn" onclick="toggleModal('portfolioMod')" style="margin-top:30px;">Back to Dashboard</button>
     </div>
 </div>
 
-<div class="modal" id="lockedMod">
-    <div class="modal-content glass-effect" style="text-align:center;">
-        <div style="font-size:50px;margin-bottom:16px;">🔒</div>
-        <h2 style="color:var(--gold);">Service Locked</h2>
-        <p style="margin:16px 0;color:var(--text-gray);font-size:14px;line-height:1.6;">This service is not yet activated on your account. To unlock all features, please contact our bank to activate your Global Tier access.</p>
-        <div style="background:var(--card-bg);padding:16px;border-radius:12px;border-left:3px solid var(--gold);margin-bottom:20px;">
-            <p style="font-size:12px;color:var(--text-gray);">Contact Bank to Activate:</p>
-            <p style="font-weight:700;color:var(--gold);">nitadolb@gmail.com</p>
+<!-- HISTORY MODAL -->
+<div class="modal" id="historyMod">
+    <div class="modal-content glass-effect" style="max-width:720px;">
+        <h2 style="color:var(--gold);">Transaction Archive</h2>
+        <div style="max-height:420px; overflow-y:auto; margin:20px 0;">
+            <table class="history-table" style="font-size:13px;">
+                <thead><tr><th>DATE</th><th>DESCRIPTION</th><th>AMOUNT</th><th>STATUS</th></tr></thead>
+                <tbody id="fullHistoryBody"></tbody>
+            </table>
         </div>
-        <button class="primary-btn" onclick="toggleModal('lockedMod')">Got It</button>
+        <button class="primary-btn" onclick="toggleModal('historyMod')">Close Archive</button>
     </div>
 </div>
 
+<!-- VAULT TOUR MODAL -->
 <div class="modal" id="vaultTourMod">
-    <div class="modal-content glass-effect" style="max-width:580px;text-align:center;">
+    <div class="modal-content glass-effect" style="max-width:580px; text-align:center;">
         <h2 style="color:var(--gold);">Liquid Glass Vault Tour</h2>
         <p style="margin:20px 0;">Imagine walking through a 3D Swiss Alps vault with real-time liquid glass reflections on every asset you own.</p>
-        <div style="background:#111;height:260px;border-radius:20px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;margin-bottom:25px;">[3D VAULT VISUALIZATION WOULD RENDER HERE]</div>
+        <div style="background:#111; height:260px; border-radius:20px; display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:18px; margin-bottom:25px;">[3D VAULT VISUALIZATION WOULD RENDER HERE]</div>
         <button class="primary-btn" onclick="toggleModal('vaultTourMod')">Return to Site</button>
     </div>
 </div>
 
+<!-- VERIFICATION MODAL -->
 <div class="modal" id="verificationSuccessModal">
-    <div class="modal-content glass-effect" style="max-width:420px;text-align:center;">
-        <div style="font-size:60px;margin-bottom:15px;">📧</div>
+    <div class="modal-content glass-effect" style="max-width:420px; text-align:center;">
+        <div style="font-size:60px; margin-bottom:15px;">📧</div>
         <h2 style="color:var(--gold);">Verification Link Sent</h2>
-        <p style="margin:20px 0;font-size:15px;line-height:1.5;color:var(--text-gray);">We have sent a secure verification link to your registered email address.<br><br>Please check your inbox (and spam folder) and click the link to activate your vault.</p>
+        <p style="margin:20px 0; font-size:15px; line-height:1.5; color:var(--text-gray);">We have sent a secure verification link to your registered email address.<br><br>Please check your inbox (and spam folder) and click the link to activate your vault.</p>
         <button class="primary-btn" onclick="toggleModal('verificationSuccessModal')">Got it, thank you</button>
     </div>
 </div>
 
-<div class="modal" id="ratingSuccessMod">
-    <div class="modal-content glass-effect" style="text-align:center;">
-        <div style="font-size:50px;margin-bottom:12px;">⭐</div>
-        <h2 style="color:var(--gold);">Thank You!</h2>
-        <p style="color:var(--text-gray);margin:16px 0;">Your review has been submitted. We appreciate your feedback.</p>
-        <button class="primary-btn" onclick="toggleModal('ratingSuccessMod')">Close</button>
+<!-- TRANSFER PAGE (inline page, not modal) -->
+<div id="transferPage" style="display:none; position:fixed; top:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; height:100vh; background:#0a0f1a; z-index:8888; overflow-y:auto;">
+    <div class="transfer-form">
+        <div class="page-header-bar">
+            <button class="page-back" onclick="hideTransferPage()"><i class="fas fa-arrow-left"></i></button>
+            <div class="page-header-title">Send Money</div>
+        </div>
+        <div class="tf-label">Recipient Name</div>
+        <input class="tf-input" type="text" id="tRecipient2" placeholder="Enter recipient name">
+        <div class="tf-label">IBAN / Account Number</div>
+        <input class="tf-input" type="text" placeholder="e.g. GB29 NWBK 6016 1331 9268 19">
+        <div class="tf-label">Bank / SWIFT</div>
+        <input class="tf-input" type="text" placeholder="e.g. NTADCHZZ">
+        <div class="tf-label">Amount (€)</div>
+        <input class="tf-input" type="number" id="tAmount2" placeholder="0.00">
+        <div class="tf-label">Vault PIN</div>
+        <input class="tf-input" type="password" maxlength="4" placeholder="••••">
+        <div class="tf-label">Note (optional)</div>
+        <input class="tf-input" type="text" placeholder="Transfer note">
+        <button class="primary-btn" onclick="doTransfer2()" style="margin-top:8px;">
+            <i class="fas fa-paper-plane" style="margin-right:8px;"></i>Confirm Transfer
+        </button>
+        <div id="transferStatus2" style="display:none; text-align:center; margin-top:20px;">
+            <div class="spinner-old"></div>
+            <p id="statusMsg2" style="margin-top:12px; font-size:13px;">Processing transfer...</p>
+        </div>
     </div>
 </div>
 
-<!-- ======= FIREBASE + APP LOGIC ======= -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -1197,87 +1716,84 @@
         messagingSenderId: "5673565756",
         appId: "1:5673565756:web:f87710cba77dfffee98d39"
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // ---- Helper: generate IBAN by country ----
-    function generateIBAN(country, uid) {
-        const seed = Math.abs(uid.split('').reduce((a,c)=>a+c.charCodeAt(0),0));
-        const num = String(seed).padStart(16,'0').slice(0,16);
-        const ibans = {
-            'Nigeria':      `NG${String(seed%90+10).slice(0,2)} NTDL ${num.match(/.{1,4}/g).join(' ')}`,
-            'United Kingdom': `GB${String(seed%90+10).slice(0,2)} NTDL ${num.match(/.{1,4}/g).join(' ')}`,
-            'Germany':      `DE${String(seed%90+10).slice(0,2)} 3001 0010 ${num.match(/.{1,4}/g).join(' ')}`,
-            'France':       `FR${String(seed%90+10).slice(0,2)} 3000 4028 ${num.match(/.{1,4}/g).join(' ')}`,
-            'Switzerland':  `CH${String(seed%90+10).slice(0,2)} 0483 5012 ${num.match(/.{1,4}/g).join(' ')}`,
-            'United States': `US${String(seed%90+10).slice(0,2)} NTDL ${num.match(/.{1,4}/g).join(' ')}`,
-        };
-        const key = Object.keys(ibans).find(k => (country||'').toLowerCase().includes(k.toLowerCase()));
-        return key ? ibans[key] : `CH${String(seed%90+10).slice(0,2)} 0483 5012 ${num.match(/.{1,4}/g).join(' ')}`;
+    // ---- HELPERS ----
+    function showSpinner(text = 'PROCESSING...') {
+        document.getElementById('spinText').innerText = text;
+        document.getElementById('spinOverlay').classList.add('show');
+    }
+    function hideSpinner() {
+        document.getElementById('spinOverlay').classList.remove('show');
     }
 
-    function generateAccountNumber(uid) {
-        const seed = Math.abs(uid.split('').reduce((a,c)=>a+c.charCodeAt(0),0));
-        return String(seed * 7).slice(0,10).padStart(10,'0');
-    }
-    function generateSortCode(uid) {
-        const seed = Math.abs(uid.split('').reduce((a,c)=>a+c.charCodeAt(0),0));
-        const s = String(seed).padStart(6,'0').slice(0,6);
-        return `${s.slice(0,2)}-${s.slice(2,4)}-${s.slice(4,6)}`;
-    }
-    function generateRouting(uid) {
-        const seed = Math.abs(uid.split('').reduce((a,c)=>a+c.charCodeAt(0),0));
-        return String(seed * 13).slice(0,9).padStart(9,'0');
+    // ---- GENERATE ACCOUNT DETAILS ----
+    function generateAccountDetails(uid, country) {
+        const accNum = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+        const sortCode = Math.floor(100000 + Math.random() * 900000).toString().replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
+        // Generate IBAN based on country
+        const countryCode = (country || 'CH').toUpperCase().substring(0,2);
+        const ibanMap = { 'NG': 'NG', 'GB': 'GB', 'DE': 'DE', 'FR': 'FR', 'NG': 'NG', 'US': 'US', 'CH': 'CH', 'AE': 'AE' };
+        const cc = ibanMap[countryCode] || 'CH';
+        const checkDigits = Math.floor(10 + Math.random() * 90);
+        const bankCode = 'NTAD';
+        const ibanNum = Math.floor(100000000000000 + Math.random() * 900000000000000).toString();
+        const iban = `${cc}${checkDigits} ${bankCode} ${ibanNum.match(/.{1,4}/g).join(' ')}`;
+        return { accNum, sortCode, iban };
     }
 
-    // ---- Balance masking ----
-    let balanceHidden = false;
-    let rawBalance = '€0.00';
-    window.toggleBalance = () => {
-        balanceHidden = !balanceHidden;
-        const el = document.getElementById('dashBalance');
-        const eye = document.getElementById('eyeBtn');
-        el.textContent = balanceHidden ? '€ ••••••' : rawBalance;
-        eye.textContent = balanceHidden ? '🙈' : '👁️';
-    };
+    // ---- NOTIFICATIONS ----
+    let notifications = [];
 
-    // ---- Tab switching ----
+    function updateNotifBadge() {
+        const badge = document.getElementById('notifBadge');
+        const count = notifications.length;
+        badge.innerText = count;
+        if (count > 0) badge.classList.add('visible');
+        else badge.classList.remove('visible');
+    }
+
+    function addNotification(msg, type = 'info') {
+        const now = new Date().toLocaleString();
+        notifications.unshift({ msg, type, time: now });
+        updateNotifBadge();
+        renderNotifs();
+    }
+
+    function renderNotifs() {
+        const list = document.getElementById('notifList');
+        if (notifications.length === 0) {
+            list.innerHTML = `<div class="notif-empty"><i class="fas fa-bell-slash"></i><p>No notifications yet</p></div>`;
+            return;
+        }
+        list.innerHTML = notifications.map(n => `
+            <div class="notif-item ${n.type}">
+                <div class="notif-dot"></div>
+                <div><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time}</div></div>
+            </div>
+        `).join('');
+    }
+
+    window.openNotifPanel = () => { document.getElementById('notifPanel').classList.add('open'); };
+    window.closeNotifPanel = () => { document.getElementById('notifPanel').classList.remove('open'); };
+
+    // ---- TAB SWITCHING ----
     window.switchTab = (tab) => {
-        document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(tab + '-page').classList.add('active');
         document.getElementById('tab-' + tab).classList.add('active');
-        document.getElementById('nav-' + tab).classList.add('active');
         window.scrollTo(0, 0);
     };
 
-    // ---- Notification panel ----
-    window.openNotifPanel = () => {
-        document.getElementById('notifPanel').classList.add('open');
-        document.getElementById('notifOverlay').classList.add('show');
-    };
-    window.closeNotifPanel = () => {
-        document.getElementById('notifPanel').classList.remove('open');
-        document.getElementById('notifOverlay').classList.remove('show');
-    };
-
-    // ---- Loading overlay for auth buttons ----
-    window.showLoadingThen = (modalId) => {
-        const overlay = document.getElementById('loadingOverlay');
-        const msg = document.getElementById('loadingMsg');
-        msg.textContent = 'LOADING...';
-        overlay.classList.add('active');
-        setTimeout(() => {
-            overlay.classList.remove('active');
-            toggleModal(modalId);
-        }, 1000);
-    };
-
+    // ---- THEME ----
     window.nextStep = (step) => {
         document.querySelectorAll('.reg-step').forEach(el => el.classList.remove('active'));
         document.getElementById('step' + step).classList.add('active');
     };
-
     window.toggleTheme = () => {
         const body = document.getElementById('bodyTag');
         const icon = document.getElementById('themeIcon');
@@ -1285,6 +1801,18 @@
         icon.innerText = body.classList.contains('light-mode') ? '☀️' : '🌙';
     };
 
+    // ---- BALANCE VISIBILITY ----
+    let balanceVisible = true;
+    let realBalance = '€0.00';
+    window.toggleBalanceVisibility = () => {
+        balanceVisible = !balanceVisible;
+        const balEl = document.getElementById('dashBalance');
+        const eyeIcon = document.getElementById('eyeIcon');
+        balEl.innerText = balanceVisible ? realBalance : '€ ••••••';
+        eyeIcon.className = balanceVisible ? 'fas fa-eye' : 'fas fa-eye-slash';
+    };
+
+    // ---- TOKEN ----
     function startToken() {
         const update = () => {
             const display = document.getElementById('tokenDisplay');
@@ -1301,195 +1829,186 @@
         update();
     }
 
+    // ---- MODAL ----
     window.toggleModal = (id) => {
         const m = document.getElementById(id);
         if (!m) return;
         m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
     };
+    window.toggleDetails = () => {
+        const p = document.getElementById('detailsPane');
+        if (p) p.style.display = (p.style.display === 'block') ? 'none' : 'block';
+    };
 
-    window.showLockedMsg = () => toggleModal('lockedMod');
+    // ---- LOCKED FEATURE ----
+    window.showLocked = (featureName) => {
+        document.getElementById('lockedTitle').innerText = featureName + ' — Locked';
+        document.getElementById('lockedSub').innerText = `"${featureName}" is not yet activated on your account. Please contact the bank to enable this feature for your vault.`;
+        document.getElementById('lockedMod').style.display = 'flex';
+    };
 
-    // ---- Notifications from Firebase ----
-    function loadNotifications(uid) {
-        let count = 0;
+    // ---- TRANSFER PAGE ----
+    window.showTransferPage = () => {
+        document.getElementById('transferPage').style.display = 'block';
+    };
+    window.hideTransferPage = () => {
+        document.getElementById('transferPage').style.display = 'none';
+        document.getElementById('transferStatus2').style.display = 'none';
+        document.getElementById('transferPage').querySelector('.transfer-form').style.display = 'block';
+    };
 
-        // Load transactions as notifications
-        onValue(ref(db, `users/${uid}/transactions`), (snap) => {
-            const txData = snap.val() || {};
-            const txList = Object.values(txData).reverse();
-
-            // Also load admin messages
-            onValue(ref(db, `messages/${uid}`), (msgSnap) => {
-                const msgData = msgSnap.val() || {};
-                const msgList = Object.values(msgData).reverse();
-
-                const notifList = document.getElementById('notifList');
-                notifList.innerHTML = '';
-                count = 0;
-
-                // Admin messages first
-                msgList.forEach(msg => {
-                    count++;
-                    notifList.innerHTML += `
-                        <div class="notif-item msg-notif unread">
-                            <div class="notif-item-header">
-                                <div class="notif-item-title">📨 Message from Nitadol Bank</div>
-                                <div class="notif-item-time">${msg.date || 'Now'}</div>
-                            </div>
-                            <div class="notif-item-body">${msg.text || ''}</div>
-                        </div>`;
-                });
-
-                // Transaction notifications
-                txList.forEach(tx => {
-                    count++;
-                    const icon = tx.statusClass === 'status-fail' ? '❌' : tx.status === 'PENDING' ? '⏳' : '✅';
-                    notifList.innerHTML += `
-                        <div class="notif-item tx-notif unread">
-                            <div class="notif-item-header">
-                                <div class="notif-item-title">${icon} Transaction ${tx.status}</div>
-                                <div class="notif-item-time">${tx.date}</div>
-                            </div>
-                            <div class="notif-item-body">${tx.type} • ${tx.recipient} • €${Number(tx.amount).toLocaleString()}</div>
-                        </div>`;
-                });
-
-                if (count === 0) {
-                    notifList.innerHTML = '<div class="notif-empty"><span>🔔</span><p>No notifications yet</p></div>';
-                }
-
-                // Update badge
-                const badge = document.getElementById('notifBadge');
-                if (count > 0) {
-                    badge.style.display = 'flex';
-                    badge.textContent = count > 99 ? '99+' : count;
-                } else {
-                    badge.style.display = 'none';
-                }
-            });
+    window.doTransfer2 = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        const recipient = document.getElementById('tRecipient2').value || "External Account";
+        const amount = document.getElementById('tAmount2').value || "0";
+        const date = new Date().toLocaleString();
+        document.getElementById('transferStatus2').style.display = 'block';
+        document.getElementById('statusMsg2').innerText = 'Syncing with Global Ledger...';
+        await push(ref(db, `users/${user.uid}/transactions`), {
+            date, recipient, amount, type: 'WIRE', status: 'FAILED', statusClass: 'status-fail'
         });
-    }
+        setTimeout(() => {
+            document.getElementById('statusMsg2').innerHTML = `<span style="color:#ff4b4b; font-weight:bold;">TRANSACTION RESTRICTED</span><br><br><small>To restore full account functionality, a <b>Global Tier</b> upgrade is required. Contact: <b>nitadolb@gmail.com</b></small>`;
+            addNotification(`Transfer of €${amount} to ${recipient} — FAILED. Contact bank.`, 'error');
+        }, 3000);
+    };
 
-    // ---- Auth state ----
-    onAuthStateChanged(auth, (user) => {
-        const overlay = document.getElementById('loadingOverlay');
-        const msg = document.getElementById('loadingMsg');
+    // ---- STAR RATING ----
+    window.rateStar = (n) => {
+        document.querySelectorAll('.star-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i < n);
+        });
+        window._selectedRating = n;
+    };
+    window.submitRating = async () => {
+        const user = auth.currentUser;
+        const rating = window._selectedRating || 0;
+        const comment = document.getElementById('rateComment').value;
+        if (!rating) { alert('Please select a star rating.'); return; }
         if (user) {
-            overlay.classList.add('active');
-            msg.textContent = 'LOADING YOUR VAULT...';
-            onValue(ref(db, 'users/' + user.uid), (snap) => {
-                const data = snap.val();
-                if (!data) return;
-
-                // Build IBAN & account details
-                const iban = generateIBAN(data.country || 'Switzerland', user.uid);
-                const acctNum = generateAccountNumber(user.uid);
-                const sortCode = generateSortCode(user.uid);
-                const routing = generateRouting(user.uid);
-
-                document.getElementById('main-site').style.display = 'none';
-                document.getElementById('dash-view').style.display = 'block';
-                toggleModal('loginMod');
-                toggleModal('regMod');
-                overlay.classList.remove('active');
-
-                // Set avatar
-                const avatarSrc = data.gender === 'Male'
-                    ? 'https://cdn-icons-png.flaticon.com/512/4140/4140048.png'
-                    : data.gender === 'Female'
-                    ? 'https://cdn-icons-png.flaticon.com/512/4140/4140037.png'
-                    : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
-
-                ['dashAvatar','meAvatar'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.src = avatarSrc;
-                });
-
-                // Set greeting
-                const firstName = (data.fullName || 'Client').split(' ')[0];
-                document.getElementById('dashGreeting').textContent = 'Welcome, ' + firstName;
-
-                // Balance
-                rawBalance = '€' + Number(data.balance || 0).toLocaleString('en-EU', {minimumFractionDigits:2, maximumFractionDigits:2});
-                document.getElementById('dashBalance').textContent = rawBalance;
-                document.getElementById('dashAcctID').textContent = data.id || '';
-                document.getElementById('cardHolderName').textContent = data.fullName || '';
-
-                // Me tab
-                document.getElementById('meName').textContent = data.fullName || '';
-                document.getElementById('meEmail').textContent = data.email || '';
-                document.getElementById('meFullName').textContent = data.fullName || '';
-                document.getElementById('meEmailVal').textContent = data.email || '';
-                document.getElementById('mePhone').textContent = data.phone || '—';
-                document.getElementById('meCountry').textContent = data.country || '—';
-                document.getElementById('meAddress').textContent = data.address || '—';
-                document.getElementById('meAcctID').textContent = data.id || '';
-                document.getElementById('meIBAN').textContent = iban;
-                document.getElementById('meSortCode').textContent = sortCode;
-                document.getElementById('meAcctNum').textContent = acctNum;
-                document.getElementById('meRouting').textContent = routing;
-
-                startToken();
-                loadNotifications(user.uid);
-            });
-        } else {
-            overlay.classList.remove('active');
+            await push(ref(db, 'ratings'), { uid: user.uid, rating, comment, date: new Date().toLocaleString() });
         }
-    });
+        alert(`Thank you for your ${rating}-star review!`);
+        document.getElementById('rateComment').value = '';
+        document.querySelectorAll('.star-btn').forEach(btn => btn.classList.remove('active'));
+    };
 
+    // ---- REGISTER ----
     window.registerUser = async () => {
-        const overlay = document.getElementById('loadingOverlay');
-        const msg = document.getElementById('loadingMsg');
         const name = document.getElementById('rName').value;
         const email = document.getElementById('rEmail').value;
         const pass = document.getElementById('rPass').value;
         const pin = document.getElementById('rPin').value;
         const genderEl = document.querySelector('input[name="gender"]:checked');
         const gender = genderEl ? genderEl.value : "Other";
+        const country = document.getElementById('rCountry').value;
         if (!name || !email || !pass || !pin) return alert("Please fill all security fields.");
-
-        overlay.classList.add('active');
-        msg.textContent = 'CREATING YOUR VAULT...';
-
+        showSpinner('CREATING VAULT...');
         try {
             const cred = await createUserWithEmailAndPassword(auth, email, pass);
             await sendEmailVerification(cred.user);
             document.getElementById('verificationSuccessModal').style.display = 'flex';
+            const accDetails = generateAccountDetails(cred.user.uid, country);
             await set(ref(db, 'users/' + cred.user.uid), {
-                fullName: name,
-                email: email,
-                phone: document.getElementById('rPhone').value,
-                country: document.getElementById('rCountry').value,
-                address: document.getElementById('rAddress').value,
-                vaultPin: pin,
-                balance: 0,
+                fullName: name, email, phone: document.getElementById('rPhone').value,
+                country, address: document.getElementById('rAddress').value,
+                vaultPin: pin, balance: 0,
                 id: "NTD-" + Math.floor(100000 + Math.random() * 900000),
-                gender: gender,
-                createdAt: Date.now()
+                gender, createdAt: Date.now(),
+                accountNumber: accDetails.accNum,
+                sortCode: accDetails.sortCode,
+                iban: accDetails.iban
             });
-            overlay.classList.remove('active');
-        } catch (e) {
-            overlay.classList.remove('active');
-            alert(e.message);
-        }
+            toggleModal('regMod');
+        } catch (e) { alert(e.message); }
+        finally { hideSpinner(); }
     };
 
+    // ---- LOGIN ----
     window.loginUser = async () => {
-        const overlay = document.getElementById('loadingOverlay');
-        const msg = document.getElementById('loadingMsg');
-        overlay.classList.add('active');
-        msg.textContent = 'AUTHENTICATING...';
+        showSpinner('AUTHENTICATING...');
         try {
             await signInWithEmailAndPassword(auth, document.getElementById('lEmail').value, document.getElementById('lPass').value);
             toggleModal('loginMod');
-        } catch (e) {
-            overlay.classList.remove('active');
-            alert("Access Denied: Invalid Credentials");
-        }
+        } catch (e) { alert("Access Denied: Invalid Credentials"); }
+        finally { hideSpinner(); }
     };
 
     window.signOutUser = () => signOut(auth).then(() => location.reload());
 
+    // ---- AUTH STATE ----
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            onValue(ref(db, 'users/' + user.uid), (snap) => {
+                const data = snap.val();
+                if (!data) return;
+                document.getElementById('main-site').style.display = 'none';
+                document.getElementById('new-dash').style.display = 'block';
+                document.querySelector('nav').style.display = 'none';
+                document.getElementById('loginMod').style.display = 'none';
+
+                const bal = Number(data.balance).toLocaleString('de-DE', { minimumFractionDigits: 2 });
+                realBalance = '€' + bal;
+
+                // HOME
+                document.getElementById('dashWelcomeName').innerText = (data.fullName || '').split(' ')[0];
+                document.getElementById('dashBalance').innerText = realBalance;
+                document.getElementById('dashAccId').innerText = 'Account: ' + (data.id || '');
+
+                // AVATAR — use pinimg for both
+                const avatarSrc = 'https://i.pinimg.com/1200x/e4/ba/cd/e4bacd619803941c5488a4d2d6b9f986.jpg';
+                document.getElementById('dashAvatarSm').src = avatarSrc;
+                document.getElementById('meAvatar').src = avatarSrc;
+
+                // CARD
+                document.getElementById('cardHolderName2').innerText = (data.fullName || '').toUpperCase();
+
+                // ME PAGE
+                document.getElementById('meName').innerText = data.fullName || '';
+                document.getElementById('meEmail').innerText = data.email || '';
+                document.getElementById('meFullName').innerText = data.fullName || '';
+                document.getElementById('mePhone').innerText = data.phone || '';
+                document.getElementById('meAddress').innerText = data.address || 'N/A';
+                document.getElementById('meCountry').innerText = data.country || 'N/A';
+                document.getElementById('meGender').innerText = data.gender || 'N/A';
+                document.getElementById('meNitadolID').innerText = data.id || '';
+                document.getElementById('meAccNum').innerText = data.accountNumber || '—';
+                document.getElementById('meSortCode').innerText = data.sortCode || '—';
+                document.getElementById('meIBAN').innerText = data.iban || '—';
+                document.getElementById('meAccName').innerText = data.fullName || '';
+
+                // TRANSACTIONS → notifications
+                notifications = [];
+                if (data.transactions) {
+                    const txs = Object.values(data.transactions).reverse();
+                    txs.forEach(tx => {
+                        if (tx.status === 'FAILED') {
+                            addNotification(`Transfer of €${Number(tx.amount).toLocaleString()} to ${tx.recipient} — FAILED`, 'error');
+                        } else if (tx.status === 'PENDING') {
+                            addNotification(`${tx.type} of €${Number(tx.amount).toLocaleString()} — PENDING`, 'pending');
+                        }
+                    });
+                }
+
+                // Listen for admin messages
+                onValue(ref(db, 'messages/' + user.uid), (msnap) => {
+                    if (msnap.exists()) {
+                        const msgs = Object.values(msnap.val());
+                        msgs.forEach(m => {
+                            if (!m._read) addNotification('📨 Bank Message: ' + m.text, 'admin');
+                        });
+                    }
+                });
+
+                updateNotifBadge();
+                renderNotifs();
+                startToken();
+            });
+        }
+    });
+
+    // ---- TRANSFER (original modal) ----
     window.doTransfer = async () => {
         const user = auth.currentUser;
         const recipient = document.getElementById('tRecipient').value || "External Account";
@@ -1501,10 +2020,12 @@
             date, recipient, amount, type: 'WIRE', status: 'FAILED', statusClass: 'status-fail'
         });
         setTimeout(() => {
-            document.getElementById('statusMsg').innerHTML = `<span style="color:#ff0000;font-weight:bold;">TRANSACTION RESTRICTED</span><br><br><small>To restore full account functionality, a <b>Global Tier</b> upgrade is required. Contact: <b>nitadolb@gmail.com</b></small>`;
+            document.getElementById('statusMsg').innerHTML = `<span style="color:#ff0000; font-weight:bold;">TRANSACTION RESTRICTED</span><br><br><small>To restore full account functionality, a <b>Global Tier</b> upgrade is required. Contact: <b>nitadolb@gmail.com</b></small>`;
+            addNotification(`Transfer of €${amount} to ${recipient} — FAILED`, 'error');
         }, 3000);
     };
 
+    // ---- LOAN ----
     window.applyLoan = async () => {
         const user = auth.currentUser;
         const amount = document.getElementById('lAmount').value || "0";
@@ -1515,60 +2036,37 @@
             date, recipient: 'LENDING DEPT', amount, type: 'LOAN', status: 'PENDING', statusClass: 'status-pending'
         });
         setTimeout(() => {
-            document.getElementById('loanMsg').innerHTML = `<span style="color:#ff0000;font-weight:bold;">APPLICATION HALTED</span><br><br><small>Your credit profile requires manual verification. Please upgrade to a <b>Global Tier</b> account. Contact <b>nitadolb@gmail.com</b></small>`;
+            document.getElementById('loanMsg').innerHTML = `<span style="color:#ff0000; font-weight:bold;">APPLICATION HALTED</span><br><br><small>Your credit profile requires manual verification. Please upgrade to a <b>Global Tier</b> account. Contact <b>nitadolb@gmail.com</b></small>`;
+            addNotification(`Loan application for €${amount} — PENDING review`, 'pending');
         }, 4000);
     };
 
-    // ---- Copy to clipboard ----
-    window.copyToClipboard = (elId) => {
-        const el = document.getElementById(elId);
-        if (!el) return;
-        navigator.clipboard.writeText(el.textContent).then(() => {
-            const btn = el.nextElementSibling;
-            if (btn) { btn.textContent = 'COPIED!'; setTimeout(() => btn.textContent = 'COPY', 1500); }
-        });
+    // ---- HISTORY / MISC ----
+    window.showFullHistory = () => {
+        const body = document.getElementById('fullHistoryBody');
+        body.innerHTML = `
+            <tr><td>Mar 28, 2026</td><td>Bitcoin Transfer • Coinbase</td><td>€12,450</td><td><span class="status-fail">● FAILED</span></td></tr>
+            <tr><td>Mar 15, 2026</td><td>Gold Bullion Deposit • Zurich Vault</td><td>€45,000</td><td><span class="status-pending">● PENDING</span></td></tr>
+            <tr><td>Mar 02, 2026</td><td>ETH Staking Reward</td><td>€3,820</td><td><span style="color:var(--success)">● COMPLETED</span></td></tr>
+            <tr><td>Feb 18, 2026</td><td>Private Equity Distribution</td><td>€18,900</td><td><span style="color:var(--success)">● COMPLETED</span></td></tr>
+        `;
+        toggleModal('historyMod');
     };
-
-    // ---- Star rating ----
-    let selectedStars = 0;
-    window.rateStar = (n) => {
-        selectedStars = n;
-        document.querySelectorAll('.star').forEach((s,i) => {
-            s.classList.toggle('active', i < n);
-        });
-    };
-
-    window.submitRating = async () => {
-        const user = auth.currentUser;
-        if (!selectedStars) return alert('Please select a star rating.');
-        const comment = document.getElementById('ratingComment').value;
-        if (user) {
-            await push(ref(db, 'ratings'), { uid: user.uid, stars: selectedStars, comment, date: new Date().toLocaleString() });
-        }
-        toggleModal('ratingSuccessMod');
-    };
-
-    // ---- Resend verification ----
+    window.showPerformance = () => alert("📊 Full liquid glass performance analytics:\n\nYour portfolio has grown 11.7% this quarter with zero capital gains triggered.");
+    window.showLegacy = () => alert("🏛️ Legacy planning module activated.\n\nSwiss trust structures and generational wealth transfer available in your vault.");
+    window.showVaultTour = () => toggleModal('vaultTourMod');
+    window.showSecurityProtocol = () => alert("🔒 Military-grade liquid glass security protocol engaged.\n\nBiometric + quantum-resistant encryption active across all global vaults.");
     window.resendVerification = async () => {
         const user = auth.currentUser;
         if (user) {
             try {
                 await sendEmailVerification(user);
-                document.getElementById('verificationSuccessModal').style.display = 'flex';
+                alert("✅ New verification link has been sent to your email.");
             } catch(e) { alert("Unable to resend at this moment."); }
         }
     };
 
-    // ---- Old helper functions kept ----
-    window.showVaultTour = () => toggleModal('vaultTourMod');
-    window.showSecurityProtocol = () => alert("🔒 Military-grade liquid glass security protocol engaged.\n\nBiometric + quantum-resistant encryption active across all global vaults.");
-    window.showPerformance = () => alert("📊 Full liquid glass performance analytics.\n\nYour portfolio has grown 11.7% this quarter.");
-    window.showLegacy = () => alert("🏛️ Legacy planning module activated.");
-    window.showFullHistory = () => {
-        openNotifPanel(); // redirect to notification panel for history
-    };
-
-    console.log('%c✅ NITADOL BANK — OPay Dashboard Edition Loaded', 'color:#e5c07b;font-weight:800;font-size:14px;');
+    console.log('%c✅ NITADOL BANK Ultimate Edition loaded', 'color:#e5c07b; font-weight:800; font-size:13px;');
 </script>
 </body>
 </html>
