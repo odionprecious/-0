@@ -136,7 +136,6 @@
         /* ===== NEW OPAY-STYLE DASHBOARD ===== */
         /* ============================================= */
 
-        /* Full screen phone app wrapper */
         #new-dash {
             display: none;
             background: #0a0f1a;
@@ -248,11 +247,17 @@
             gap: 12px;
             margin-bottom: 8px;
         }
+        /* Dynamic font size for balance amount */
         .balance-amount {
-            font-size: 36px;
             font-weight: 800;
             color: #fff;
             letter-spacing: -1px;
+            font-size: clamp(18px, 7vw, 36px);
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: font-size 0.3s;
         }
         .eye-toggle {
             background: rgba(0,0,0,0.2);
@@ -636,10 +641,12 @@
         .notif-item.error { border-left-color: var(--error); }
         .notif-item.pending { border-left-color: #facc15; }
         .notif-item.admin { border-left-color: #00bfff; }
+        .notif-item.success { border-left-color: var(--success); }
         .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); margin-top: 6px; flex-shrink: 0; }
         .notif-item.error .notif-dot { background: var(--error); }
         .notif-item.pending .notif-dot { background: #facc15; }
         .notif-item.admin .notif-dot { background: #00bfff; }
+        .notif-item.success .notif-dot { background: var(--success); }
         .notif-msg { font-size: 13px; color: #fff; margin-bottom: 4px; font-weight: 500; }
         .notif-time { font-size: 11px; color: var(--text-gray); }
         .notif-empty { text-align: center; padding: 60px 20px; color: var(--text-gray); }
@@ -736,17 +743,22 @@
         }
         .page-header-title { font-size: 18px; font-weight: 800; color: #fff; }
 
-        /* Finance Page */
+        /* Finance Page — phone optimized */
+        .finance-stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
         .finance-stat-box {
             background: linear-gradient(135deg, #0f172a, #1e293b);
             border: 1px solid rgba(179,147,89,0.2);
-            border-radius: 18px;
-            padding: 20px;
-            margin-bottom: 16px;
+            border-radius: 16px;
+            padding: 16px 14px;
         }
-        .finance-stat-label { font-size: 12px; color: var(--text-gray); margin-bottom: 6px; }
-        .finance-stat-val { font-size: 28px; font-weight: 800; color: var(--gold); }
-        .finance-stat-change { font-size: 12px; margin-top: 4px; }
+        .finance-stat-label { font-size: 11px; color: var(--text-gray); margin-bottom: 6px; line-height: 1.3; }
+        .finance-stat-val { font-size: clamp(16px, 4vw, 24px); font-weight: 800; color: var(--gold); word-break: break-all; }
+        .finance-stat-change { font-size: 11px; margin-top: 4px; }
 
         /* Reward Page */
         .reward-banner {
@@ -795,11 +807,187 @@
         }
         .tf-input:focus { border-color: var(--gold); }
 
+        /* ===== RECEIPT MODAL ===== */
+        #receiptMod .modal-content {
+            max-width: 420px;
+            padding: 0;
+            overflow: hidden;
+            border-radius: 24px;
+        }
+        .receipt-wrap {
+            background: #0a0f1a;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        .receipt-header {
+            background: linear-gradient(135deg, #b39359 0%, #8a6f3a 50%, #c9a96e 100%);
+            padding: 28px 24px 20px;
+            text-align: center;
+            position: relative;
+        }
+        .receipt-header::after {
+            content: '';
+            position: absolute;
+            bottom: -14px; left: 0;
+            width: 100%; height: 28px;
+            background: #0a0f1a;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+        .receipt-bank-logo {
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 8px;
+        }
+        .receipt-check {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: rgba(0,255,136,0.2);
+            border: 2px solid var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 24px;
+            color: var(--success);
+        }
+        .receipt-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .receipt-subtitle {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+        .receipt-amount-block {
+            text-align: center;
+            padding: 28px 24px 16px;
+        }
+        .receipt-amount-label {
+            font-size: 11px;
+            color: var(--text-gray);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .receipt-amount {
+            font-size: clamp(26px, 8vw, 42px);
+            font-weight: 900;
+            color: var(--success);
+            letter-spacing: -1px;
+        }
+        .receipt-divider {
+            display: flex;
+            align-items: center;
+            margin: 0 24px 16px;
+            gap: 10px;
+        }
+        .receipt-divider::before, .receipt-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            border-top: 1px dashed rgba(179,147,89,0.3);
+        }
+        .receipt-divider span {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(179,147,89,0.3);
+        }
+        .receipt-body {
+            padding: 0 24px 20px;
+        }
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            gap: 12px;
+        }
+        .receipt-row:last-child { border-bottom: none; }
+        .receipt-row-label {
+            font-size: 11px;
+            color: var(--text-gray);
+            flex-shrink: 0;
+        }
+        .receipt-row-val {
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            text-align: right;
+            word-break: break-all;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .receipt-txid {
+            background: rgba(179,147,89,0.08);
+            border: 1px solid rgba(179,147,89,0.2);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 0 24px 20px;
+            text-align: center;
+        }
+        .receipt-txid p { font-size: 10px; color: var(--text-gray); margin-bottom: 4px; }
+        .receipt-txid span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--gold);
+            word-break: break-all;
+        }
+        .receipt-footer {
+            padding: 0 24px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .receipt-download-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+        }
+        .receipt-download-btn:hover { background: var(--gold-bright); }
+        .receipt-close-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: var(--text-gray);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .receipt-close-btn:hover { background: rgba(255,255,255,0.05); }
+        .receipt-stamp {
+            margin: 0 24px 12px;
+            text-align: center;
+            font-size: 10px;
+            color: rgba(179,147,89,0.5);
+            letter-spacing: 1px;
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
             #new-dash { max-width: 100%; }
             .bottom-nav { max-width: 100%; }
             .notif-panel { max-width: 100%; }
+            .finance-stat-val { font-size: clamp(14px, 3.5vw, 20px); }
         }
         @media (max-width:768px) {
             nav { padding:12px 4%; }
@@ -1361,27 +1549,27 @@
         </div>
     </div>
 
-    <!-- FINANCE PAGE -->
+    <!-- FINANCE PAGE — phone optimized -->
     <div id="finance-page" class="dash-page">
         <div class="page-header-bar">
             <div class="page-header-title">Finance</div>
         </div>
         <div style="padding:0 16px;">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+            <div class="finance-stat-grid">
                 <div class="finance-stat-box">
                     <div class="finance-stat-label">Digital Assets</div>
                     <div class="finance-stat-val">€248,750</div>
-                    <div class="finance-stat-change" style="color:var(--success);">▲ +4.2% this month</div>
+                    <div class="finance-stat-change" style="color:var(--success);">▲ +4.2%</div>
                 </div>
                 <div class="finance-stat-box">
                     <div class="finance-stat-label">Physical Bullion</div>
                     <div class="finance-stat-val" style="color:#e5c07b;">€142,300</div>
-                    <div class="finance-stat-change" style="color:var(--gold);">Stable • Vaulted</div>
+                    <div class="finance-stat-change" style="color:var(--gold);">Stable</div>
                 </div>
                 <div class="finance-stat-box">
-                    <div class="finance-stat-label">Liquidity Available</div>
+                    <div class="finance-stat-label">Liquidity</div>
                     <div class="finance-stat-val" style="color:var(--success);">€87,000</div>
-                    <div class="finance-stat-change" style="color:var(--success);">Instant access</div>
+                    <div class="finance-stat-change" style="color:var(--success);">Instant</div>
                 </div>
                 <div class="finance-stat-box">
                     <div class="finance-stat-label">Portfolio Growth</div>
@@ -1496,7 +1684,7 @@
     </div>
 </div>
 
-<!-- MODALS (all existing + new) -->
+<!-- MODALS -->
 <div class="modal" id="helpMod">
     <div class="modal-content glass-effect">
         <h2 style="color:var(--gold);">Client Support</h2>
@@ -1673,6 +1861,79 @@
     </div>
 </div>
 
+<!-- ===== RECEIPT MODAL ===== -->
+<div class="modal" id="receiptMod">
+    <div class="modal-content" style="padding:0; border:none; background:transparent; max-width:420px;">
+        <div class="receipt-wrap" id="receiptContent">
+            <!-- HEADER -->
+            <div class="receipt-header">
+                <div class="receipt-bank-logo">NITADOL BANK</div>
+                <div class="receipt-check"><i class="fas fa-check"></i></div>
+                <div class="receipt-title">Transfer Successful</div>
+                <div class="receipt-subtitle" id="receiptDate">—</div>
+            </div>
+
+            <!-- AMOUNT -->
+            <div class="receipt-amount-block">
+                <div class="receipt-amount-label">Amount Transferred</div>
+                <div class="receipt-amount" id="receiptAmount">€0.00</div>
+            </div>
+
+            <!-- DASHED DIVIDER -->
+            <div class="receipt-divider"><span></span></div>
+
+            <!-- BODY ROWS -->
+            <div class="receipt-body">
+                <div class="receipt-row">
+                    <span class="receipt-row-label">From</span>
+                    <span class="receipt-row-val" id="receiptFrom">—</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">To</span>
+                    <span class="receipt-row-val" id="receiptTo">—</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Bank</span>
+                    <span class="receipt-row-val">Nitadol Private Bank</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">SWIFT</span>
+                    <span class="receipt-row-val">NTADCHZZ</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Type</span>
+                    <span class="receipt-row-val">SEPA Wire Transfer</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Status</span>
+                    <span class="receipt-row-val" style="color:var(--success);">✓ COMPLETED</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Balance After</span>
+                    <span class="receipt-row-val" id="receiptBalAfter" style="color:var(--gold);">—</span>
+                </div>
+            </div>
+
+            <!-- TX ID -->
+            <div class="receipt-txid">
+                <p>Transaction Reference ID</p>
+                <span id="receiptTxId">NTD-000000-000000</span>
+            </div>
+
+            <!-- STAMP -->
+            <div class="receipt-stamp">NITADOL BANK • ZURICH • EST. 1977 • AUTHORISED &amp; REGULATED</div>
+
+            <!-- FOOTER BUTTONS -->
+            <div class="receipt-footer">
+                <button class="receipt-download-btn" onclick="downloadReceipt()">
+                    <i class="fas fa-download"></i> Download Receipt (PDF)
+                </button>
+                <button class="receipt-close-btn" onclick="toggleModal('receiptMod')">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- TRANSFER PAGE (inline page, not modal) -->
 <div id="transferPage" style="display:none; position:fixed; top:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; height:100vh; background:#0a0f1a; z-index:8888; overflow-y:auto;">
     <div class="transfer-form">
@@ -1683,15 +1944,15 @@
         <div class="tf-label">Recipient Name</div>
         <input class="tf-input" type="text" id="tRecipient2" placeholder="Enter recipient name">
         <div class="tf-label">IBAN / Account Number</div>
-        <input class="tf-input" type="text" placeholder="e.g. GB29 NWBK 6016 1331 9268 19">
+        <input class="tf-input" type="text" id="tIBAN2" placeholder="e.g. GB29 NWBK 6016 1331 9268 19">
         <div class="tf-label">Bank / SWIFT</div>
-        <input class="tf-input" type="text" placeholder="e.g. NTADCHZZ">
+        <input class="tf-input" type="text" id="tSwift2" placeholder="e.g. NTADCHZZ">
         <div class="tf-label">Amount (€)</div>
         <input class="tf-input" type="number" id="tAmount2" placeholder="0.00">
         <div class="tf-label">Vault PIN</div>
         <input class="tf-input" type="password" maxlength="4" placeholder="••••">
         <div class="tf-label">Note (optional)</div>
-        <input class="tf-input" type="text" placeholder="Transfer note">
+        <input class="tf-input" type="text" id="tNote2" placeholder="Transfer note">
         <button class="primary-btn" onclick="doTransfer2()" style="margin-top:8px;">
             <i class="fas fa-paper-plane" style="margin-right:8px;"></i>Confirm Transfer
         </button>
@@ -1705,7 +1966,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getDatabase, ref, set, push, onValue, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, set, push, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAurVHraTP4QkCTZ9VQA-7Ir1UCph30I8U",
@@ -1721,6 +1982,10 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
+    // Global state
+    let currentUserData = null;
+    let currentUID = null;
+
     // ---- HELPERS ----
     function showSpinner(text = 'PROCESSING...') {
         document.getElementById('spinText').innerText = text;
@@ -1734,9 +1999,8 @@
     function generateAccountDetails(uid, country) {
         const accNum = Math.floor(1000000000 + Math.random() * 9000000000).toString();
         const sortCode = Math.floor(100000 + Math.random() * 900000).toString().replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
-        // Generate IBAN based on country
         const countryCode = (country || 'CH').toUpperCase().substring(0,2);
-        const ibanMap = { 'NG': 'NG', 'GB': 'GB', 'DE': 'DE', 'FR': 'FR', 'NG': 'NG', 'US': 'US', 'CH': 'CH', 'AE': 'AE' };
+        const ibanMap = { 'NG': 'NG', 'GB': 'GB', 'DE': 'DE', 'FR': 'FR', 'US': 'US', 'CH': 'CH', 'AE': 'AE' };
         const cc = ibanMap[countryCode] || 'CH';
         const checkDigits = Math.floor(10 + Math.random() * 90);
         const bankCode = 'NTAD';
@@ -1745,8 +2009,30 @@
         return { accNum, sortCode, iban };
     }
 
+    // ---- GENERATE TRANSACTION ID ----
+    function generateTxId() {
+        const part1 = Math.random().toString(36).substring(2,8).toUpperCase();
+        const part2 = Date.now().toString(36).toUpperCase();
+        return `NTD-${part1}-${part2}`;
+    }
+
+    // ---- UPDATE BALANCE DISPLAY (dynamic font sizing) ----
+    function updateBalanceDisplay(balance) {
+        const el = document.getElementById('dashBalance');
+        const bal = Number(balance).toLocaleString('de-DE', { minimumFractionDigits: 2 });
+        window.realBalance = '€' + bal;
+        el.innerText = window.balanceVisible !== false ? window.realBalance : '€ ••••••';
+        // Dynamic font size based on character count
+        const len = window.realBalance.length;
+        if (len > 14) el.style.fontSize = '18px';
+        else if (len > 11) el.style.fontSize = '22px';
+        else if (len > 9) el.style.fontSize = '28px';
+        else el.style.fontSize = '36px';
+    }
+
     // ---- NOTIFICATIONS ----
     let notifications = [];
+    let seenAdminMsgIds = new Set();
 
     function updateNotifBadge() {
         const badge = document.getElementById('notifBadge');
@@ -1802,14 +2088,14 @@
     };
 
     // ---- BALANCE VISIBILITY ----
-    let balanceVisible = true;
-    let realBalance = '€0.00';
+    window.balanceVisible = true;
+    window.realBalance = '€0.00';
     window.toggleBalanceVisibility = () => {
-        balanceVisible = !balanceVisible;
+        window.balanceVisible = !window.balanceVisible;
         const balEl = document.getElementById('dashBalance');
         const eyeIcon = document.getElementById('eyeIcon');
-        balEl.innerText = balanceVisible ? realBalance : '€ ••••••';
-        eyeIcon.className = balanceVisible ? 'fas fa-eye' : 'fas fa-eye-slash';
+        balEl.innerText = window.balanceVisible ? window.realBalance : '€ ••••••';
+        eyeIcon.className = window.balanceVisible ? 'fas fa-eye' : 'fas fa-eye-slash';
     };
 
     // ---- TOKEN ----
@@ -1854,24 +2140,202 @@
     window.hideTransferPage = () => {
         document.getElementById('transferPage').style.display = 'none';
         document.getElementById('transferStatus2').style.display = 'none';
-        document.getElementById('transferPage').querySelector('.transfer-form').style.display = 'block';
+        // reset form
+        const form = document.getElementById('transferPage').querySelector('.transfer-form');
+        if (form) {
+            form.querySelectorAll('input').forEach(inp => inp.value = '');
+        }
     };
 
+    // ---- SHOW RECEIPT ----
+    function showReceipt(senderName, recipientName, amount, newBalance, txId, dateStr) {
+        document.getElementById('receiptDate').innerText = dateStr;
+        document.getElementById('receiptAmount').innerText = '€' + Number(amount).toLocaleString('de-DE', { minimumFractionDigits: 2 });
+        document.getElementById('receiptFrom').innerText = senderName;
+        document.getElementById('receiptTo').innerText = recipientName;
+        document.getElementById('receiptTxId').innerText = txId;
+        document.getElementById('receiptBalAfter').innerText = '€' + Number(newBalance).toLocaleString('de-DE', { minimumFractionDigits: 2 });
+        document.getElementById('receiptMod').style.display = 'flex';
+    }
+
+    // ---- DOWNLOAD RECEIPT as printable HTML ----
+    window.downloadReceipt = () => {
+        const senderName = document.getElementById('receiptFrom').innerText;
+        const recipientName = document.getElementById('receiptTo').innerText;
+        const amount = document.getElementById('receiptAmount').innerText;
+        const balAfter = document.getElementById('receiptBalAfter').innerText;
+        const txId = document.getElementById('receiptTxId').innerText;
+        const dateStr = document.getElementById('receiptDate').innerText;
+
+        const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Nitadol Bank Receipt - ${txId}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f0f2f5; font-family:'Inter',sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
+  .receipt { background:#fff; width:100%; max-width:420px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.12); }
+  .rh { background:linear-gradient(135deg,#b39359,#8a6f3a,#c9a96e); padding:32px 24px 24px; text-align:center; position:relative; }
+  .rh::after { content:''; position:absolute; bottom:-15px; left:0; width:100%; height:30px; background:#fff; border-radius:50% 50% 0 0/100% 100% 0 0; }
+  .rh .bank { font-size:12px; font-weight:900; letter-spacing:3px; color:rgba(255,255,255,0.8); margin-bottom:12px; }
+  .rh .chk { width:60px;height:60px;border-radius:50%;background:rgba(0,255,136,0.25);border:2px solid #00ff88;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:26px;color:#00ff88; }
+  .rh h2 { font-size:20px;font-weight:800;color:#fff;margin-bottom:4px; }
+  .rh p { font-size:12px;color:rgba(255,255,255,0.75); }
+  .amt-block { text-align:center;padding:28px 24px 16px; }
+  .amt-label { font-size:11px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px; }
+  .amt { font-size:48px;font-weight:900;color:#00a86b;letter-spacing:-2px; }
+  .divider { display:flex;align-items:center;margin:0 24px 16px;gap:8px; }
+  .divider::before,.divider::after { content:'';flex:1;border-top:1px dashed #ddd; }
+  .divider span { width:8px;height:8px;border-radius:50%;background:#ddd; }
+  .body { padding:0 24px 16px; }
+  .row { display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f1f5f9;gap:12px; }
+  .row:last-child { border-bottom:none; }
+  .rl { font-size:12px;color:#94a3b8;flex-shrink:0; }
+  .rv { font-size:13px;font-weight:700;color:#0f172a;text-align:right;font-family:'JetBrains Mono',monospace;word-break:break-all; }
+  .txid { background:#f8fafc;border:1px dashed #b39359;border-radius:12px;padding:14px 18px;margin:0 24px 16px;text-align:center; }
+  .txid p { font-size:10px;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px; }
+  .txid span { font-family:'JetBrains Mono',monospace;font-size:12px;color:#b39359;font-weight:700; }
+  .stamp { margin:0 24px 12px;text-align:center;font-size:10px;color:#cbd5e1;letter-spacing:1px; }
+  .footer { padding:0 24px 24px;text-align:center; }
+  .footer p { font-size:10px;color:#94a3b8;margin-top:8px; }
+  @media print {
+    body { background:white; }
+    .receipt { box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<div class="receipt">
+  <div class="rh">
+    <div class="bank">NITADOL BANK</div>
+    <div class="chk">✓</div>
+    <h2>Transfer Successful</h2>
+    <p>${dateStr}</p>
+  </div>
+  <div class="amt-block">
+    <div class="amt-label">Amount Transferred</div>
+    <div class="amt">${amount}</div>
+  </div>
+  <div class="divider"><span></span></div>
+  <div class="body">
+    <div class="row"><span class="rl">From</span><span class="rv">${senderName}</span></div>
+    <div class="row"><span class="rl">To</span><span class="rv">${recipientName}</span></div>
+    <div class="row"><span class="rl">Bank</span><span class="rv">Nitadol Private Bank</span></div>
+    <div class="row"><span class="rl">SWIFT / BIC</span><span class="rv">NTADCHZZ</span></div>
+    <div class="row"><span class="rl">Transfer Type</span><span class="rv">SEPA Wire Transfer</span></div>
+    <div class="row"><span class="rl">Status</span><span class="rv" style="color:#00a86b;">✓ COMPLETED</span></div>
+    <div class="row"><span class="rl">Balance After</span><span class="rv" style="color:#b39359;">${balAfter}</span></div>
+  </div>
+  <div class="txid">
+    <p>Transaction Reference ID</p>
+    <span>${txId}</span>
+  </div>
+  <div class="stamp">NITADOL BANK • BAHNHOFSTRASSE 1, ZURICH • EST. 1977</div>
+  <div class="footer">
+    <p>This is an official transaction receipt. Keep for your records.</p>
+  </div>
+</div>
+<script>window.onload=()=>{window.print();}<\/script>
+</body>
+</html>`;
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Nitadol_Receipt_${txId}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    // ---- TRANSFER v2 (inline page — now SUCCESSFUL) ----
     window.doTransfer2 = async () => {
         const user = auth.currentUser;
         if (!user) return;
-        const recipient = document.getElementById('tRecipient2').value || "External Account";
-        const amount = document.getElementById('tAmount2').value || "0";
+        const recipient = document.getElementById('tRecipient2').value.trim();
+        const iban = document.getElementById('tIBAN2').value.trim();
+        const amount = parseFloat(document.getElementById('tAmount2').value) || 0;
+        const note = document.getElementById('tNote2').value.trim();
         const date = new Date().toLocaleString();
+
+        if (!recipient) { alert('Please enter a recipient name.'); return; }
+        if (amount <= 0) { alert('Please enter a valid amount.'); return; }
+
+        // Check balance
+        const currentBalance = currentUserData ? Number(currentUserData.balance) : 0;
+        if (amount > currentBalance) {
+            alert('Insufficient vault balance for this transfer.');
+            return;
+        }
+
         document.getElementById('transferStatus2').style.display = 'block';
         document.getElementById('statusMsg2').innerText = 'Syncing with Global Ledger...';
+
+        const txId = generateTxId();
+        const newBalance = currentBalance - amount;
+
+        try {
+            // Save transaction and update balance atomically
+            await push(ref(db, `users/${user.uid}/transactions`), {
+                date, recipient, iban: iban || 'N/A', amount, type: 'WIRE', status: 'SUCCESS',
+                txId, note: note || '', balanceAfter: newBalance
+            });
+            await update(ref(db, `users/${user.uid}`), { balance: newBalance });
+
+            document.getElementById('transferStatus2').style.display = 'none';
+            hideTransferPage();
+
+            // Show receipt
+            const senderName = currentUserData ? currentUserData.fullName : 'Vault Client';
+            showReceipt(senderName, recipient, amount, newBalance, txId, date);
+
+            // Update local balance display
+            updateBalanceDisplay(newBalance);
+            if (currentUserData) currentUserData.balance = newBalance;
+
+            addNotification(`✅ Transfer of €${Number(amount).toLocaleString()} to ${recipient} — SUCCESSFUL`, 'success');
+
+        } catch (e) {
+            document.getElementById('statusMsg2').innerText = 'An error occurred. Please try again.';
+            console.error(e);
+        }
+    };
+
+    // ---- TRANSFER (original modal — now SUCCESSFUL) ----
+    window.doTransfer = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        const recipient = document.getElementById('tRecipient').value || "External Account";
+        const amount = parseFloat(document.getElementById('tAmount').value) || 0;
+        const date = new Date().toLocaleString();
+
+        const currentBalance = currentUserData ? Number(currentUserData.balance) : 0;
+        if (amount > currentBalance) { alert('Insufficient vault balance.'); return; }
+
+        document.getElementById('transInputs').style.display = 'none';
+        document.getElementById('transStatus').style.display = 'block';
+        document.getElementById('statusMsg').innerText = 'Syncing with Global Ledger...';
+
+        const txId = generateTxId();
+        const newBalance = currentBalance - amount;
+
         await push(ref(db, `users/${user.uid}/transactions`), {
-            date, recipient, amount, type: 'WIRE', status: 'FAILED', statusClass: 'status-fail'
+            date, recipient, amount, type: 'WIRE', status: 'SUCCESS', txId, balanceAfter: newBalance
         });
+        await update(ref(db, `users/${user.uid}`), { balance: newBalance });
+
         setTimeout(() => {
-            document.getElementById('statusMsg2').innerHTML = `<span style="color:#ff4b4b; font-weight:bold;">TRANSACTION RESTRICTED</span><br><br><small>To restore full account functionality, a <b>Global Tier</b> upgrade is required. Contact: <b>nitadolb@gmail.com</b></small>`;
-            addNotification(`Transfer of €${amount} to ${recipient} — FAILED. Contact bank.`, 'error');
-        }, 3000);
+            toggleModal('transMod');
+            document.getElementById('transInputs').style.display = 'block';
+            document.getElementById('transStatus').style.display = 'none';
+
+            const senderName = currentUserData ? currentUserData.fullName : 'Vault Client';
+            showReceipt(senderName, recipient, amount, newBalance, txId, date);
+            updateBalanceDisplay(newBalance);
+            if (currentUserData) currentUserData.balance = newBalance;
+            addNotification(`✅ Transfer of €${Number(amount).toLocaleString()} to ${recipient} — SUCCESSFUL`, 'success');
+        }, 2000);
     };
 
     // ---- STAR RATING ----
@@ -1940,23 +2404,25 @@
     // ---- AUTH STATE ----
     onAuthStateChanged(auth, (user) => {
         if (user) {
+            currentUID = user.uid;
             onValue(ref(db, 'users/' + user.uid), (snap) => {
                 const data = snap.val();
                 if (!data) return;
+                currentUserData = data;
+
                 document.getElementById('main-site').style.display = 'none';
                 document.getElementById('new-dash').style.display = 'block';
                 document.querySelector('nav').style.display = 'none';
                 document.getElementById('loginMod').style.display = 'none';
 
-                const bal = Number(data.balance).toLocaleString('de-DE', { minimumFractionDigits: 2 });
-                realBalance = '€' + bal;
+                // Balance with dynamic sizing
+                updateBalanceDisplay(data.balance);
 
                 // HOME
                 document.getElementById('dashWelcomeName').innerText = (data.fullName || '').split(' ')[0];
-                document.getElementById('dashBalance').innerText = realBalance;
                 document.getElementById('dashAccId').innerText = 'Account: ' + (data.id || '');
 
-                // AVATAR — use pinimg for both
+                // AVATAR
                 const avatarSrc = 'https://i.pinimg.com/1200x/e4/ba/cd/e4bacd619803941c5488a4d2d6b9f986.jpg';
                 document.getElementById('dashAvatarSm').src = avatarSrc;
                 document.getElementById('meAvatar').src = avatarSrc;
@@ -1983,7 +2449,9 @@
                 if (data.transactions) {
                     const txs = Object.values(data.transactions).reverse();
                     txs.forEach(tx => {
-                        if (tx.status === 'FAILED') {
+                        if (tx.status === 'SUCCESS') {
+                            addNotification(`✅ Transfer of €${Number(tx.amount).toLocaleString()} to ${tx.recipient} — SUCCESSFUL`, 'success');
+                        } else if (tx.status === 'FAILED') {
                             addNotification(`Transfer of €${Number(tx.amount).toLocaleString()} to ${tx.recipient} — FAILED`, 'error');
                         } else if (tx.status === 'PENDING') {
                             addNotification(`${tx.type} of €${Number(tx.amount).toLocaleString()} — PENDING`, 'pending');
@@ -1991,39 +2459,34 @@
                     });
                 }
 
-                // Listen for admin messages
-                onValue(ref(db, 'messages/' + user.uid), (msnap) => {
-                    if (msnap.exists()) {
-                        const msgs = Object.values(msnap.val());
-                        msgs.forEach(m => {
-                            if (!m._read) addNotification('📨 Bank Message: ' + m.text, 'admin');
-                        });
-                    }
-                });
-
                 updateNotifBadge();
                 renderNotifs();
                 startToken();
             });
+
+            // Listen for admin messages (bank comments)
+            onValue(ref(db, 'messages/' + user.uid), (msnap) => {
+                if (msnap.exists()) {
+                    const msgs = msnap.val();
+                    Object.entries(msgs).forEach(([key, m]) => {
+                        if (!seenAdminMsgIds.has(key)) {
+                            seenAdminMsgIds.add(key);
+                            // Style admin messages beautifully
+                            const msgText = `
+                                <div style="display:flex;flex-direction:column;gap:2px;">
+                                    <span style="font-size:11px;color:#00bfff;font-weight:800;text-transform:uppercase;letter-spacing:1px;">📨 Bank Message</span>
+                                    <span>${m.text}</span>
+                                    ${m.from ? `<span style="font-size:10px;color:#94a3b8;">— ${m.from}</span>` : ''}
+                                </div>
+                            `;
+                            addNotification(msgText, 'admin');
+                        }
+                    });
+                }
+            });
+
         }
     });
-
-    // ---- TRANSFER (original modal) ----
-    window.doTransfer = async () => {
-        const user = auth.currentUser;
-        const recipient = document.getElementById('tRecipient').value || "External Account";
-        const amount = document.getElementById('tAmount').value || "0";
-        const date = new Date().toLocaleString();
-        document.getElementById('transInputs').style.display = 'none';
-        document.getElementById('transStatus').style.display = 'block';
-        await push(ref(db, `users/${user.uid}/transactions`), {
-            date, recipient, amount, type: 'WIRE', status: 'FAILED', statusClass: 'status-fail'
-        });
-        setTimeout(() => {
-            document.getElementById('statusMsg').innerHTML = `<span style="color:#ff0000; font-weight:bold;">TRANSACTION RESTRICTED</span><br><br><small>To restore full account functionality, a <b>Global Tier</b> upgrade is required. Contact: <b>nitadolb@gmail.com</b></small>`;
-            addNotification(`Transfer of €${amount} to ${recipient} — FAILED`, 'error');
-        }, 3000);
-    };
 
     // ---- LOAN ----
     window.applyLoan = async () => {
@@ -2045,7 +2508,7 @@
     window.showFullHistory = () => {
         const body = document.getElementById('fullHistoryBody');
         body.innerHTML = `
-            <tr><td>Mar 28, 2026</td><td>Bitcoin Transfer • Coinbase</td><td>€12,450</td><td><span class="status-fail">● FAILED</span></td></tr>
+            <tr><td>Mar 28, 2026</td><td>Bitcoin Transfer • Coinbase</td><td>€12,450</td><td><span style="color:var(--success)">● SUCCESS</span></td></tr>
             <tr><td>Mar 15, 2026</td><td>Gold Bullion Deposit • Zurich Vault</td><td>€45,000</td><td><span class="status-pending">● PENDING</span></td></tr>
             <tr><td>Mar 02, 2026</td><td>ETH Staking Reward</td><td>€3,820</td><td><span style="color:var(--success)">● COMPLETED</span></td></tr>
             <tr><td>Feb 18, 2026</td><td>Private Equity Distribution</td><td>€18,900</td><td><span style="color:var(--success)">● COMPLETED</span></td></tr>
